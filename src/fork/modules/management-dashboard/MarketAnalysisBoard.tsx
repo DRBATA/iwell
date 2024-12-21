@@ -233,41 +233,41 @@ const MarketAnalysisBoard = () => {
                         case 1:
                           return (
                             <>
-                              <div className="text-sm">Fast-track approval stages</div>
-                              <div className="text-sm">Market entry windows</div>
-                              <div className="text-sm">Resource scaling points</div>
+                              <div className="text-sm">Simple approval process</div>
+                              <div className="text-sm">Ready for new entrants</div>
+                              <div className="text-sm">Low startup costs</div>
                             </>
                           );
                         case 2:
                           return (
                             <>
-                              <div className="text-sm">Growth acceleration zones</div>
-                              <div className="text-sm">Competition gaps</div>
-                              <div className="text-sm">Market timing windows</div>
+                              <div className="text-sm">Fast-growing market areas</div>
+                              <div className="text-sm">Few existing competitors</div>
+                              <div className="text-sm">Good time to enter market</div>
                             </>
                           );
                         case 3:
                           return (
                             <>
-                              <div className="text-sm">Regulatory staging gates</div>
-                              <div className="text-sm">Education program targets</div>
-                              <div className="text-sm">Competition white space</div>
+                              <div className="text-sm">Standard regulations to follow</div>
+                              <div className="text-sm">Market needs education</div>
+                              <div className="text-sm">Room for new solutions</div>
                             </>
                           );
                         case 4:
                           return (
                             <>
-                              <div className="text-sm">Compliance staging gates</div>
-                              <div className="text-sm">Capital staging gates</div>
-                              <div className="text-sm">Partnership channels</div>
+                              <div className="text-sm">Complex regulations</div>
+                              <div className="text-sm">High investment needed</div>
+                              <div className="text-sm">Partner support required</div>
                             </>
                           );
                         case 5:
                           return (
                             <>
-                              <div className="text-sm">Regulatory staging gates</div>
-                              <div className="text-sm">Education program targets</div>
-                              <div className="text-sm">Market access channels</div>
+                              <div className="text-sm">Strict regulations</div>
+                              <div className="text-sm">Extensive market education needed</div>
+                              <div className="text-sm">Limited market access</div>
                             </>
                           );
                         default:
@@ -281,9 +281,9 @@ const MarketAnalysisBoard = () => {
                 <div className="pt-4 border-t border-gray-200">
                   <div className="space-y-4">
                     {/* Market Impact */}
-                    <div>
-                      <div className="text-sm font-medium text-gray-600">Market Share Potential</div>
-                      <div className="font-medium text-indigo-700">
+                    <div className="p-3 bg-gray-50 rounded-lg">
+                      <div className="text-sm font-medium text-gray-600 mb-1">Market Share Potential</div>
+                      <div className="font-medium text-lg text-indigo-700">
                         {segment.keyMetric.includes('%') ? 
                           `${segment.keyMetric.split(' ')[0]} Market Share` : 
                           segment.keyMetric.split(' ')[0]
@@ -292,9 +292,9 @@ const MarketAnalysisBoard = () => {
                     </div>
 
                     {/* Healthcare Value */}
-                    <div>
-                      <div className="text-sm font-medium text-gray-600">Healthcare Value</div>
-                      <div className="font-medium text-indigo-700">
+                    <div className="p-3 bg-gray-50 rounded-lg">
+                      <div className="text-sm font-medium text-gray-600 mb-1">Healthcare Value</div>
+                      <div className="font-medium text-lg text-indigo-700">
                         {segment.keyMetric.includes('£') ? 
                           `${segment.keyMetric.split(' ').slice(1).join(' ')} Healthcare Savings` :
                           `${segment.keyMetric.split(' ').slice(1).join(' ')} Reduction`
