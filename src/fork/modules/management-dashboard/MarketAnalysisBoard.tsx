@@ -284,10 +284,15 @@ const MarketAnalysisBoard = () => {
                     <div className="p-3 bg-gray-50 rounded-lg">
                       <div className="text-sm font-medium text-gray-600 mb-1">Market Share Potential</div>
                       <div className="font-medium text-lg text-indigo-700">
-                        {segment.keyMetric.includes('%') ? 
-                          `${segment.keyMetric.split(' ')[0]} Market Share` : 
-                          segment.keyMetric.split(' ')[0]
-                        }
+                        {(() => {
+                          if (segment.keyMetric.includes('%')) {
+                            return `${segment.keyMetric.split(' ')[0]} Market Share`;
+                          }
+                          if (segment.keyMetric.includes('£')) {
+                            return 'Specialist Healthcare Segment';
+                          }
+                          return 'Growing Treatment Market';
+                        })()}
                       </div>
                     </div>
 
@@ -295,10 +300,12 @@ const MarketAnalysisBoard = () => {
                     <div className="p-3 bg-gray-50 rounded-lg">
                       <div className="text-sm font-medium text-gray-600 mb-1">Healthcare Value</div>
                       <div className="font-medium text-lg text-indigo-700">
-                        {segment.keyMetric.includes('£') ? 
-                          `${segment.keyMetric.split(' ').slice(1).join(' ')} Healthcare Savings` :
-                          `${segment.keyMetric.split(' ').slice(1).join(' ')} Reduction`
-                        }
+                        {(() => {
+                          if (segment.keyMetric.includes('£')) {
+                            return `${segment.keyMetric.split(' ')[0]} Per Patient Savings`;
+                          }
+                          return `${segment.keyMetric.split(' ')[0]} Treatment Cost Reduction`;
+                        })()}
                       </div>
                     </div>
 
