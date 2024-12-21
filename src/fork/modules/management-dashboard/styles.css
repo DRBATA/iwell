@@ -1,37 +1,57 @@
+:root {
+  --primary-blue: #0B4F6C;
+  --accent-teal: #01B4BC;
+  --success-green: #7DC242;
+  --info-blue: #4A90E2;
+  --dark-gray: #2C3E50;
+  --light-gray: #E5E9F0;
+  --alert-red: #FF6B6B;
+  --warning-yellow: #FED766;
+}
+
 .barrier-badge {
   @apply px-3 py-1.5 rounded-full font-semibold text-sm;
 }
 
 .barrier-badge-1 {
-  @apply bg-green-100 text-green-800 border border-green-300;
+  background-color: var(--success-green);
+  @apply text-white border-0;
 }
 
 .barrier-badge-2 {
-  @apply bg-blue-100 text-blue-800 border border-blue-300;
+  background-color: var(--info-blue);
+  @apply text-white border-0;
 }
 
 .barrier-badge-3 {
-  @apply bg-yellow-100 text-yellow-800 border border-yellow-300;
+  background-color: var(--warning-yellow);
+  @apply text-dark-gray border-0;
 }
 
 .barrier-badge-4 {
-  @apply bg-orange-100 text-orange-800 border border-orange-300;
+  background-color: var(--accent-teal);
+  @apply text-white border-0;
 }
 
 .barrier-badge-5 {
-  @apply bg-red-100 text-red-800 border border-red-300;
+  background-color: var(--alert-red);
+  @apply text-white border-0;
 }
 
 .segment-card {
   @apply p-6 cursor-pointer transition-all transform hover:-translate-y-1 border-2;
+  background-color: white;
 }
 
 .segment-card-selected {
-  @apply ring-2 ring-indigo-500 shadow-xl bg-indigo-50 border-indigo-300;
+  @apply ring-2 shadow-xl border-0;
+  background-color: var(--light-gray);
+  border-color: var(--primary-blue);
+  ring-color: var(--primary-blue);
 }
 
 .segment-card-default {
-  @apply hover:shadow-lg hover:bg-gray-50 border-gray-200;
+  @apply hover:shadow-lg border-gray-200;
 }
 
 .metric-value {
@@ -39,19 +59,24 @@
 }
 
 .metric-high {
-  @apply bg-green-100 text-green-800 border border-green-300;
+  background-color: var(--success-green);
+  @apply text-white;
 }
 
 .metric-medium {
-  @apply bg-yellow-100 text-yellow-800 border border-yellow-300;
+  background-color: var(--warning-yellow);
+  @apply text-dark-gray;
 }
 
 .metric-low {
-  @apply bg-red-100 text-red-800 border border-red-300;
+  background-color: var(--alert-red);
+  @apply text-white;
 }
 
 .comparison-section {
-  @apply mt-8 bg-white rounded-xl shadow-xl p-8 border-2 border-indigo-100;
+  @apply mt-8 rounded-xl shadow-xl p-8 border-2;
+  background-color: white;
+  border-color: var(--primary-blue);
 }
 
 .chart-container {
@@ -59,31 +84,49 @@
 }
 
 .metric-card {
-  @apply p-4 bg-white rounded-lg shadow-sm border border-gray-200 hover:border-indigo-300 transition-colors;
+  @apply p-4 rounded-lg shadow-sm border transition-colors;
+  background-color: var(--light-gray);
+  border-color: var(--dark-gray);
+}
+
+.metric-card:hover {
+  border-color: var(--accent-teal);
 }
 
 /* Enhanced Select Styles */
 select {
-  @apply appearance-none bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5;
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-  background-position: right 0.5rem center;
-  background-repeat: no-repeat;
-  background-size: 1.5em 1.5em;
-  padding-right: 2.5rem;
+  @apply appearance-none text-sm rounded-lg block w-full p-2.5;
+  background-color: white;
+  border: 2px solid var(--primary-blue);
+  color: var(--dark-gray);
+}
+
+select:focus {
+  @apply outline-none;
+  border-color: var(--accent-teal);
+  box-shadow: 0 0 0 2px rgba(1, 180, 188, 0.2);
 }
 
 select option {
-  @apply bg-white text-gray-900 py-2 px-4 hover:bg-indigo-50 cursor-pointer;
-  font-size: 0.95rem;
+  @apply py-2 px-4 cursor-pointer;
+  background-color: white;
+  color: var(--dark-gray);
+}
+
+select option:hover {
+  background-color: var(--light-gray);
 }
 
 /* Control Section Styles */
 .control-section {
-  @apply bg-white p-6 rounded-xl shadow-lg border-2 border-gray-200;
+  @apply p-6 rounded-xl shadow-lg border-2;
+  background-color: white;
+  border-color: var(--primary-blue);
 }
 
 .control-label {
-  @apply block text-sm font-medium text-gray-700 mb-2;
+  @apply block text-sm font-medium mb-2;
+  color: var(--dark-gray);
 }
 
 .control-select {
@@ -104,11 +147,44 @@ select option {
 }
 
 .select-dropdown {
-  @apply absolute w-full bg-white mt-1 rounded-lg shadow-lg border border-gray-200 z-50;
+  @apply absolute w-full mt-1 rounded-lg shadow-lg border z-50;
+  background-color: white;
+  border-color: var(--primary-blue);
   max-height: 250px;
   overflow-y: auto;
 }
 
 .select-dropdown option {
-  @apply px-4 py-2 hover:bg-indigo-50 cursor-pointer transition-colors;
+  @apply px-4 py-2 cursor-pointer transition-colors;
+  color: var(--dark-gray);
+}
+
+.select-dropdown option:hover {
+  background-color: var(--light-gray);
+}
+
+/* Headers */
+h2 {
+  color: var(--primary-blue);
+}
+
+h3 {
+  color: var(--dark-gray);
+}
+
+/* Text Colors */
+.text-primary {
+  color: var(--primary-blue);
+}
+
+.text-accent {
+  color: var(--accent-teal);
+}
+
+.text-success {
+  color: var(--success-green);
+}
+
+.text-info {
+  color: var(--info-blue);
 }
