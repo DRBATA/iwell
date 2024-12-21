@@ -7,7 +7,7 @@ export interface MarketRating {
 
 export interface MarketMatrix {
   rating: MarketRating;
-  costSavings: string;
+  entryPath: string;
 }
 
 export interface MarketSegment {

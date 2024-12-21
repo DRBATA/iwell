@@ -22,7 +22,16 @@ export const cannabinoidMarketData: MarketSegment = {
       customerAcquisitionCost: "£1,600",
       lifetimeValue: "£40,000",
       revenuePerEmployee: "£480,000",
-      projectedGrowth: [64, 70.1, 76.8, 84.1, 92.0]
+      projectedGrowth: [64, 70.1, 76.8, 84.1, 92.0],
+      matrix: {
+        rating: {
+          marketSize: 4,
+          accessibility: 4,
+          barriers: 2,
+          regulatory: 3
+        },
+        entryPath: "GP protocol standardization"
+      }
     },
     {
       id: "cancer-treatment",
@@ -34,7 +43,16 @@ export const cannabinoidMarketData: MarketSegment = {
       customerAcquisitionCost: "£1,440",
       lifetimeValue: "£36,000",
       revenuePerEmployee: "£440,000",
-      projectedGrowth: [56, 60.5, 65.3, 70.5, 76.1]
+      projectedGrowth: [56, 60.5, 65.3, 70.5, 76.1],
+      matrix: {
+        rating: {
+          marketSize: 4,
+          accessibility: 3,
+          barriers: 3,
+          regulatory: 4
+        },
+        entryPath: "Oncology pathway integration"
+      }
     },
     {
       id: "anxiety-disorders",
@@ -46,7 +64,16 @@ export const cannabinoidMarketData: MarketSegment = {
       customerAcquisitionCost: "£1,200",
       lifetimeValue: "£32,000",
       revenuePerEmployee: "£400,000",
-      projectedGrowth: [48, 52.8, 58.1, 63.9, 70.3]
+      projectedGrowth: [48, 52.8, 58.1, 63.9, 70.3],
+      matrix: {
+        rating: {
+          marketSize: 3,
+          accessibility: 4,
+          barriers: 2,
+          regulatory: 3
+        },
+        entryPath: "Primary care pathway alignment"
+      }
     },
     {
       id: "ptsd",
@@ -58,7 +85,16 @@ export const cannabinoidMarketData: MarketSegment = {
       customerAcquisitionCost: "£1,760",
       lifetimeValue: "£28,000",
       revenuePerEmployee: "£320,000",
-      projectedGrowth: [32, 34.2, 36.6, 39.2, 41.9]
+      projectedGrowth: [32, 34.2, 36.6, 39.2, 41.9],
+      matrix: {
+        rating: {
+          marketSize: 3,
+          accessibility: 2,
+          barriers: 4,
+          regulatory: 4
+        },
+        entryPath: "Mental health service integration"
+      }
     },
     {
       id: "sleep-disorders",
@@ -70,7 +106,16 @@ export const cannabinoidMarketData: MarketSegment = {
       customerAcquisitionCost: "£960",
       lifetimeValue: "£24,000",
       revenuePerEmployee: "£360,000",
-      projectedGrowth: [40, 43.6, 47.5, 51.8, 56.5]
+      projectedGrowth: [40, 43.6, 47.5, 51.8, 56.5],
+      matrix: {
+        rating: {
+          marketSize: 3,
+          accessibility: 3,
+          barriers: 3,
+          regulatory: 3
+        },
+        entryPath: "Sleep clinic protocol development"
+      }
     },
     {
       id: "fibromyalgia",
@@ -82,7 +127,16 @@ export const cannabinoidMarketData: MarketSegment = {
       customerAcquisitionCost: "£1,360",
       lifetimeValue: "£22,400",
       revenuePerEmployee: "£336,000",
-      projectedGrowth: [36, 39.1, 42.4, 46.0, 49.9]
+      projectedGrowth: [36, 39.1, 42.4, 46.0, 49.9],
+      matrix: {
+        rating: {
+          marketSize: 3,
+          accessibility: 2,
+          barriers: 4,
+          regulatory: 4
+        },
+        entryPath: "Treatment pathway standardization"
+      }
     },
     {
       id: "neuropathic-pain",
@@ -94,7 +148,16 @@ export const cannabinoidMarketData: MarketSegment = {
       customerAcquisitionCost: "£1,280",
       lifetimeValue: "£25,600",
       revenuePerEmployee: "£384,000",
-      projectedGrowth: [44, 47.8, 52.0, 56.5, 61.4]
+      projectedGrowth: [44, 47.8, 52.0, 56.5, 61.4],
+      matrix: {
+        rating: {
+          marketSize: 3,
+          accessibility: 3,
+          barriers: 3,
+          regulatory: 3
+        },
+        entryPath: "Pain clinic protocol alignment"
+      }
     },
     {
       id: "autism",
@@ -106,7 +169,16 @@ export const cannabinoidMarketData: MarketSegment = {
       customerAcquisitionCost: "£2,400",
       lifetimeValue: "£40,000",
       revenuePerEmployee: "£240,000",
-      projectedGrowth: [24, 25.9, 27.9, 30.1, 32.4]
+      projectedGrowth: [24, 25.9, 27.9, 30.1, 32.4],
+      matrix: {
+        rating: {
+          marketSize: 2,
+          accessibility: 2,
+          barriers: 5,
+          regulatory: 5
+        },
+        entryPath: "Specialist pathway development"
+      }
     }
   ]
 };
