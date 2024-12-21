@@ -61,17 +61,16 @@ const MarketAnalysisBoard = () => {
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       {/* Controls */}
-      <div className="mb-8 bg-white p-6 rounded-xl shadow-lg border-2 border-gray-200">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Market Analysis Controls</h2>
-        <div className="flex flex-wrap gap-6 items-center">
-          <div className="min-w-[200px]">
-            <label htmlFor="sortBy" className="block text-sm font-medium text-gray-700 mb-2">
+      <div className="control-section mb-8">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">Market Analysis Controls</h2>
+        <div className="control-group">
+          <div className="select-container control-select">
+            <label htmlFor="sortBy" className="control-label">
               Sort Segments By
             </label>
             <select
               id="sortBy"
               name="sortBy"
-              className="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
               aria-label="Sort segments by metric"
@@ -81,14 +80,13 @@ const MarketAnalysisBoard = () => {
               <option value="profitMargin">Profit Margin</option>
             </select>
           </div>
-          <div className="min-w-[200px]">
-            <label htmlFor="barriers" className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="select-container control-select">
+            <label htmlFor="barriers" className="control-label">
               Filter by Entry Barriers
             </label>
             <select
               id="barriers"
               name="barriers"
-              className="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
               value={filterBarriers || ''}
               onChange={(e) => setFilterBarriers(e.target.value ? Number(e.target.value) : null)}
               aria-label="Filter by barrier level"
@@ -100,7 +98,7 @@ const MarketAnalysisBoard = () => {
             </select>
           </div>
           {selectedSegments.length > 0 && (
-            <div className="text-sm font-medium text-indigo-600 bg-indigo-50 px-4 py-2 rounded-full">
+            <div className="px-4 py-2 bg-indigo-50 border border-indigo-200 rounded-lg text-sm font-medium text-indigo-700">
               {selectedSegments.length === 2 ? 
                 'Click on segments to update comparison' :
                 'Select another segment to compare (max 2)'}

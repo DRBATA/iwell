@@ -61,3 +61,54 @@
 .metric-card {
   @apply p-4 bg-white rounded-lg shadow-sm border border-gray-200 hover:border-indigo-300 transition-colors;
 }
+
+/* Enhanced Select Styles */
+select {
+  @apply appearance-none bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+}
+
+select option {
+  @apply bg-white text-gray-900 py-2 px-4 hover:bg-indigo-50 cursor-pointer;
+  font-size: 0.95rem;
+}
+
+/* Control Section Styles */
+.control-section {
+  @apply bg-white p-6 rounded-xl shadow-lg border-2 border-gray-200;
+}
+
+.control-label {
+  @apply block text-sm font-medium text-gray-700 mb-2;
+}
+
+.control-select {
+  @apply min-w-[200px] max-w-xs;
+}
+
+.control-group {
+  @apply flex flex-wrap gap-6 items-center;
+}
+
+/* Dropdown Menu Container */
+.select-container {
+  @apply relative;
+}
+
+.select-container select:focus + .select-dropdown {
+  @apply block;
+}
+
+.select-dropdown {
+  @apply absolute w-full bg-white mt-1 rounded-lg shadow-lg border border-gray-200 z-50;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.select-dropdown option {
+  @apply px-4 py-2 hover:bg-indigo-50 cursor-pointer transition-colors;
+}
