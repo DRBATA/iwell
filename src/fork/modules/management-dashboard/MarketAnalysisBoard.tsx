@@ -287,9 +287,16 @@ const MarketAnalysisBoard = () => {
           <div className="analysis-card">
             <h3>Market Overview</h3>
             <p>
-              Targeted diagnostic protocols could save £2,500 per case in 
-              administrative overhead, while reducing overall healthcare costs 
-              by £1-2B through optimized pathways.
+              {selectedSegments.length > 0 ? (
+                `Beyond the £${analysis.totalMarketSize.toFixed(1)}B market, these segments show real healthcare impact: 
+                ${selectedSegments.some(s => s.id === "anxiety-disorders") ? "€7,700 saved through proper diagnosis, " : ""}
+                ${selectedSegments.some(s => s.id === "neuropathic-pain") ? "1 in 200 children affected by PANDAS ($2,500 savings per child), " : ""}
+                ${selectedSegments.some(s => s.id === "chronic-pain") ? "€148 per patient from faster diagnosis, " : ""}
+                ${selectedSegments.some(s => s.id === "cancer-treatment") ? "20% reduction in ED admissions through better testing, " : ""}
+                leading to 8-20% total care cost reduction.`
+              ) : (
+                "Select market segments to see their healthcare impact and cost-saving opportunities."
+              )}
             </p>
             <div className="analysis-metric">
               <span>£{analysis.totalMarketSize.toFixed(1)}B</span>
