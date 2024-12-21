@@ -37,14 +37,8 @@ const OpportunityCard: React.FC<OpportunityCardProps> = ({
       </div>
       <div>
         <div className="text-sm font-medium">Implementation</div>
-        <div className={`text-lg ${
-          metrics.ease === 'High' 
-            ? 'text-green-600' 
-            : metrics.ease === 'Moderate'
-            ? 'text-yellow-600'
-            : 'text-red-600'
-        }`}>
-          {metrics.ease} Ease
+        <div className="text-sm text-gray-600">
+          {implementationSteps[title] || "System setup • Team training • Process update"}
         </div>
       </div>
       <div>
@@ -62,6 +56,15 @@ const OpportunityCard: React.FC<OpportunityCardProps> = ({
     </div>
   </Card>
 );
+
+const implementationSteps: Record<string, string> = {
+  "ADHD Healthcare Optimization": "Write protocols • Train GPs • Track results",
+  "PANDAS Early Detection": "Set up tests • Train practice • Monitor cases",
+  "Point of Care Testing": "Get equipment in • Train staff • Update ED flow",
+  "Integrated Care Contracts": "Draft contracts • Align services • Change process",
+  "Antimicrobial Stewardship": "Set guidelines • Train doctors • Track usage",
+  "Misdiagnosis Prevention": "Set standards • Train teams • Check impact"
+};
 
 export const OpportunityCards: React.FC = () => {
   const opportunities: OpportunityCardProps[] = [
