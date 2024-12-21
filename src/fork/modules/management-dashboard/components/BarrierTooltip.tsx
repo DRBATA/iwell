@@ -20,70 +20,70 @@ const BarrierTooltip: React.FC<BarrierTooltipProps> = ({ barrierLevel, marketNam
         return {
           type: 'Low Entry Barriers',
           insights: [
-            'Established regulatory pathways exist',
-            'Strong existing market data available',
-            'Lower capital requirements'
+            'Basic approval process to follow',
+            'Clear market opportunity exists',
+            'Manageable startup costs'
           ],
           strategies: [
-            'Quality-driven differentiation (from A&E experience)',
-            'Evidence-based market positioning',
-            'Streamlined stakeholder engagement'
+            'Plan your approval path',
+            'Check market readiness',
+            'Set up efficiently'
           ]
         };
       case 2:
         return {
           type: 'Moderate-Low Barriers',
           insights: [
-            'Some regulatory oversight needed',
-            'Growing market with clear pathways',
-            'Moderate competition levels'
+            'More oversight to navigate',
+            'Room for market growth',
+            'Competition to consider'
           ],
           strategies: [
-            'MDT-style collaborative approach',
-            'Targeted compliance frameworks',
-            'Focus on underserved segments'
+            'Build your compliance',
+            'Find your opportunities',
+            'Position effectively'
           ]
         };
       case 3:
         return {
           type: 'Moderate Barriers',
           insights: [
-            'Complex regulatory requirements',
-            'Significant market education needed',
-            'Established competitor presence'
+            'Complex rules to handle',
+            'Market needs education',
+            'Strong competitors exist'
           ],
           strategies: [
-            'Peer review-based quality assurance',
-            'Clinical audit methodology application',
-            'Phased implementation approach'
+            'Handle complex rules',
+            'Build market acceptance',
+            'Stand out clearly'
           ]
         };
       case 4:
         return {
           type: 'High Barriers',
           insights: [
-            'Stringent regulatory environment',
-            'High capital requirements',
-            'Complex stakeholder landscape'
+            'Strict rules in place',
+            'Major investment needed',
+            'Many stakeholders involved'
           ],
           strategies: [
-            'Crisis team coordination principles',
-            'Evidence-based protocol development',
-            'Multi-specialty integration methods'
+            'Meet strict standards',
+            'Engage key players',
+            'Plan your rollout'
           ]
         };
       case 5:
         return {
           type: 'Very High Barriers',
           insights: [
-            'Intensive regulatory oversight',
-            'Significant resource requirements',
-            'Limited market access points'
+            'Toughest regulations exist',
+            'Highest resource needs',
+            'Most limited access'
           ],
           strategies: [
-            'Palliative care coordination model',
-            'Mental health service frameworks',
-            'Research-driven market approach'
+            'Break into markets',
+            'Use resources well',
+            'Clear the barriers'
           ]
         };
       default:
@@ -116,15 +116,20 @@ const BarrierTooltip: React.FC<BarrierTooltipProps> = ({ barrierLevel, marketNam
         right: 'calc(100% + 1rem)',
       }}
     >
-      <div className="flex justify-between items-start mb-3">
-        <h3 className="font-semibold text-gray-900">{info.type}</h3>
-        <button
-          onClick={handleSaveInsight}
-          className="text-sm bg-primary text-white px-3 py-1 rounded-full hover:bg-opacity-90 transition-colors"
-          aria-label={`Save insights for ${marketName}`}
-        >
-          Save Insight
-        </button>
+      <div className="flex flex-col gap-2 mb-3">
+        <div className="flex justify-between items-start">
+          <h3 className="font-semibold text-gray-900">{info.type}</h3>
+          <button
+            onClick={handleSaveInsight}
+            className="text-sm bg-primary text-white px-3 py-1 rounded-full hover:bg-opacity-90 transition-colors"
+            aria-label={`Save insights for ${marketName}`}
+          >
+            Save Insight
+          </button>
+        </div>
+        <div className="text-sm text-indigo-600">
+          Understanding your market barriers
+        </div>
       </div>
 
       <div className="space-y-4">
@@ -138,7 +143,7 @@ const BarrierTooltip: React.FC<BarrierTooltipProps> = ({ barrierLevel, marketNam
         </div>
 
         <div>
-          <h4 className="text-sm font-medium text-gray-700 mb-2">Proven Approaches:</h4>
+          <h4 className="text-sm font-medium text-indigo-600 mb-2">What We Bring:</h4>
           <ul className="list-disc pl-4 space-y-1">
             {info.strategies.map((strategy, index) => (
               <li key={index} className="text-sm text-gray-600">{strategy}</li>
