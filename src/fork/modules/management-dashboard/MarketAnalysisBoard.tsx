@@ -4,7 +4,6 @@ import { cannabinoidMarketData } from './data';
 import { MarketSegment } from './types';
 import ComparisonChart from './charts/ComparisonChart';
 import GrowthTrendChart from './charts/GrowthTrendChart';
-import BarrierTooltip from './components/BarrierTooltip';
 import InsightsDrawer from './components/InsightsDrawer';
 import { OpportunityCards } from './components/OpportunityCards';
 import './styles.css';
@@ -22,7 +21,6 @@ const MarketAnalysisBoard = () => {
   const [selectedSegments, setSelectedSegments] = useState<MarketSegment[]>([]);
   const [sortBy, setSortBy] = useState<'marketSize' | 'growthRate' | 'profitMargin'>('marketSize');
   const [filterBarriers, setFilterBarriers] = useState<number | null>(null);
-  const [tooltipVisible, setTooltipVisible] = useState<string | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [savedInsights, setSavedInsights] = useState<MarketInsight[]>([]);
 
@@ -217,57 +215,171 @@ const MarketAnalysisBoard = () => {
                 </div>
               </div>
               
-              <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-                <span className="text-sm font-medium text-gray-700">Entry Barriers</span>
-                <div className="relative">
-                  {(() => {
-                    const barrierLevel = segment.matrix?.rating?.barriers;
-                    const barrierLabel = barrierLevel ? 
-                      ['Very Low', 'Low', 'Moderate', 'High', 'Very High'][barrierLevel - 1] 
-                      : 'Unknown';
-                    
-                    return (
-                      <div className="flex flex-col items-end gap-1">
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs text-gray-500">Hover for details</span>
-                          <span 
-                            className={`${getBarrierBadgeClass(barrierLevel || 0)} cursor-help`}
-                            onMouseEnter={() => setTooltipVisible(segment.id)}
-                            onMouseLeave={() => setTooltipVisible(null)}
-                          >
-                            {barrierLabel}
-                          </span>
-                        </div>
-                        {barrierLevel && (
-                          <div className="flex flex-col items-end gap-1">
-                            <span className="text-xs text-gray-400">
-                              Level {barrierLevel} of 5
-                            </span>
-                            <div className="text-xs text-gray-400">
-                              {barrierLevel === 1 && "Strong market data • Established pathways"}
-                              {barrierLevel === 2 && "Growing market • Moderate competition"}
-                              {barrierLevel === 3 && "Market education • Complex requirements"}
-                              {barrierLevel === 4 && "High capital • Complex stakeholders"}
-                              {barrierLevel === 5 && "Limited access • Intensive oversight"}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })()}
-                  {tooltipVisible === segment.id && (
-                    <BarrierTooltip 
-                      barrierLevel={segment.matrix?.rating?.barriers || 0}
-                      marketName={segment.name}
-                      onSaveInsight={handleSaveInsight}
-                    />
-                  )}
+              <div className="space-y-4">
+                {/* Entry Barriers */}
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-sm font-medium text-gray-700">Entry Barriers</span>
+                    <span className={getBarrierBadgeClass(segment.matrix?.rating?.barriers || 0)}>
+                      {getBarrierLabel(segment)}
+                    </span>
+                  </div>
+                  <div className="text-xs text-gray-600">
+                    Level {segment.matrix?.rating?.barriers} of 5
+                  </div>
+                  <div className="mt-2 space-y-2">
+                    {(() => {
+                      switch(segment.matrix?.rating?.barriers) {
+                        case 1:
+                          return (
+                            <>
+                              <div className="text-sm">Fast-track approval stages</div>
+                              <div className="text-sm">Market entry windows</div>
+                              <div className="text-sm">Resource scaling points</div>
+                            </>
+                          );
+                        case 2:
+                          return (
+                            <>
+                              <div className="text-sm">Growth acceleration zones</div>
+                              <div className="text-sm">Competition gaps</div>
+                              <div className="text-sm">Market timing windows</div>
+                            </>
+                          );
+                        case 3:
+                          return (
+                            <>
+                              <div className="text-sm">Regulatory staging gates</div>
+                              <div className="text-sm">Education program targets</div>
+                              <div className="text-sm">Competition white space</div>
+                            </>
+                          );
+                        case 4:
+                          return (
+                            <>
+                              <div className="text-sm">Compliance staging gates</div>
+                              <div className="text-sm">Capital staging gates</div>
+                              <div className="text-sm">Partnership channels</div>
+                            </>
+                          );
+                        case 5:
+                          return (
+                            <>
+                              <div className="text-sm">Regulatory staging gates</div>
+                              <div className="text-sm">Education program targets</div>
+                              <div className="text-sm">Market access channels</div>
+                            </>
+                          );
+                        default:
+                          return null;
+                      }
+                    })()}
+                  </div>
                 </div>
-              </div>
 
-              <div className="pt-4 border-t border-gray-200">
-                <div className="text-sm font-medium text-gray-600 mb-2">Key Performance Indicator</div>
-                <div className="font-medium text-indigo-700">{segment.keyMetric}</div>
+                {/* Market Impact */}
+                <div className="pt-4 border-t border-gray-200">
+                  <div className="space-y-4">
+                    {/* Market Impact */}
+                    <div>
+                      <div className="text-sm font-medium text-gray-600">Market Share Potential</div>
+                      <div className="font-medium text-indigo-700">
+                        {segment.keyMetric.includes('%') ? 
+                          `${segment.keyMetric.split(' ')[0]} Market Share` : 
+                          segment.keyMetric.split(' ')[0]
+                        }
+                      </div>
+                    </div>
+
+                    {/* Healthcare Value */}
+                    <div>
+                      <div className="text-sm font-medium text-gray-600">Healthcare Value</div>
+                      <div className="font-medium text-indigo-700">
+                        {segment.keyMetric.includes('£') ? 
+                          `${segment.keyMetric.split(' ').slice(1).join(' ')} Healthcare Savings` :
+                          `${segment.keyMetric.split(' ').slice(1).join(' ')} Reduction`
+                        }
+                      </div>
+                    </div>
+
+                    {/* Market Analysis */}
+                    <div>
+                      <div className="text-sm font-medium text-gray-600 mb-2">Market Analysis</div>
+                      <div className="space-y-1">
+                        {(() => {
+                          switch(segment.id) {
+                            case "chronic-pain":
+                              return (
+                                <>
+                                  <div className="text-sm text-gray-700">Non-addictive alternative to opioids</div>
+                                  <div className="text-sm text-gray-700">GP pathway integration potential</div>
+                                  <div className="text-sm text-gray-700">Pain clinic protocol alignment</div>
+                                </>
+                              );
+                            case "cancer-treatment":
+                              return (
+                                <>
+                                  <div className="text-sm text-gray-700">Side-effect management focus</div>
+                                  <div className="text-sm text-gray-700">Oncology integration pathways</div>
+                                  <div className="text-sm text-gray-700">Quality of life improvement</div>
+                                </>
+                              );
+                            case "anxiety-disorders":
+                              return (
+                                <>
+                                  <div className="text-sm text-gray-700">Primary care integration</div>
+                                  <div className="text-sm text-gray-700">Reduced dependency on benzodiazepines</div>
+                                  <div className="text-sm text-gray-700">Mental health pathway alignment</div>
+                                </>
+                              );
+                            case "ptsd":
+                              return (
+                                <>
+                                  <div className="text-sm text-gray-700">Trauma-focused therapy integration</div>
+                                  <div className="text-sm text-gray-700">Mental health service alignment</div>
+                                  <div className="text-sm text-gray-700">Treatment resistance focus</div>
+                                </>
+                              );
+                            case "sleep-disorders":
+                              return (
+                                <>
+                                  <div className="text-sm text-gray-700">Sleep clinic integration points</div>
+                                  <div className="text-sm text-gray-700">Non-habit forming alternative</div>
+                                  <div className="text-sm text-gray-700">Sleep quality improvement focus</div>
+                                </>
+                              );
+                            case "fibromyalgia":
+                              return (
+                                <>
+                                  <div className="text-sm text-gray-700">Chronic condition management</div>
+                                  <div className="text-sm text-gray-700">Polypharmacy reduction potential</div>
+                                  <div className="text-sm text-gray-700">Quality of life focus</div>
+                                </>
+                              );
+                            case "neuropathic-pain":
+                              return (
+                                <>
+                                  <div className="text-sm text-gray-700">Alternative to anticonvulsants</div>
+                                  <div className="text-sm text-gray-700">Specialized pain management</div>
+                                  <div className="text-sm text-gray-700">Neurological pathway integration</div>
+                                </>
+                              );
+                            case "autism":
+                              return (
+                                <>
+                                  <div className="text-sm text-gray-700">Behavioral intervention support</div>
+                                  <div className="text-sm text-gray-700">Specialist pathway development</div>
+                                  <div className="text-sm text-gray-700">Family support integration</div>
+                                </>
+                              );
+                            default:
+                              return null;
+                          }
+                        })()}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </Card>
