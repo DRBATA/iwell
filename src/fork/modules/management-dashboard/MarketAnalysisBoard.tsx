@@ -6,6 +6,7 @@ import ComparisonChart from './charts/ComparisonChart';
 import GrowthTrendChart from './charts/GrowthTrendChart';
 import BarrierTooltip from './components/BarrierTooltip';
 import InsightsDrawer from './components/InsightsDrawer';
+import { OpportunityCards } from './components/OpportunityCards';
 import './styles.css';
 
 interface MarketInsight {
@@ -288,14 +289,14 @@ const MarketAnalysisBoard = () => {
             <h3>Market Overview</h3>
             <p>
               {selectedSegments.length > 0 ? (
-                `Beyond the £${analysis.totalMarketSize.toFixed(1)}B market, these segments show real healthcare impact: 
-                ${selectedSegments.some(s => s.id === "anxiety-disorders") ? "€7,700 saved through proper diagnosis, " : ""}
-                ${selectedSegments.some(s => s.id === "neuropathic-pain") ? "1 in 200 children affected by PANDAS ($2,500 savings per child), " : ""}
-                ${selectedSegments.some(s => s.id === "chronic-pain") ? "€148 per patient from faster diagnosis, " : ""}
-                ${selectedSegments.some(s => s.id === "cancer-treatment") ? "20% reduction in ED admissions through better testing, " : ""}
-                leading to 8-20% total care cost reduction.`
+                `The £${analysis.totalMarketSize.toFixed(1)}B cannabis market shows significant healthcare impact through: 
+                ${selectedSegments.some(s => s.id === "chronic-pain") ? "30% reduction in opioid prescriptions, " : ""}
+                ${selectedSegments.some(s => s.id === "anxiety-disorders") ? "£720 savings on benzodiazepines per patient, " : ""}
+                ${selectedSegments.some(s => s.id === "ptsd") ? "20% reduction in psychiatric medication use, " : ""}
+                ${selectedSegments.some(s => s.id === "sleep-disorders") ? "15% reduction in sleep aid usage, " : ""}
+                demonstrating substantial medication reduction potential.`
               ) : (
-                "Select market segments to see their healthcare impact and cost-saving opportunities."
+                "Select market segments to see their impact on medication reduction and healthcare costs."
               )}
             </p>
             <div className="analysis-metric">
@@ -311,9 +312,9 @@ const MarketAnalysisBoard = () => {
           <div className="analysis-card">
             <h3>Growth Dynamics</h3>
             <p>
-              Early intervention through advanced biomarker screening could prevent 
-              £90K per patient in long-term treatment costs, particularly in 
-              complex neuropsychiatric cases.
+              Early cannabis intervention in treatment-resistant conditions shows 
+              significant cost savings through reduced traditional medication 
+              dependence and improved patient outcomes.
             </p>
             <div className="analysis-metric">
               <span>{analysis.avgGrowthRate.toFixed(1)}%</span>
@@ -328,9 +329,9 @@ const MarketAnalysisBoard = () => {
           <div className="analysis-card">
             <h3>Entry Opportunity</h3>
             <p>
-              Streamlined PANDAS screening could save £2,000 per child in 
-              long-term therapy costs by enabling early intervention and 
-              preventing severe complications.
+              Cannabis therapies show particular promise in conditions with limited 
+              traditional treatment options, offering new pathways for patient care 
+              and cost reduction.
             </p>
             <div className="analysis-metric">
               <span>{analysis.lowBarrierSegments}</span>
@@ -345,9 +346,9 @@ const MarketAnalysisBoard = () => {
           <div className="analysis-card">
             <h3>Market Dynamics</h3>
             <p>
-              Integration of rapid diagnostic protocols could reduce treatment 
-              costs by £50-100M annually through precise patient identification 
-              and targeted interventions.
+              Strategic integration of cannabis therapies into existing treatment 
+              protocols shows potential for £50-100M annual savings through reduced 
+              traditional medication costs.
             </p>
             <div className="analysis-metric">
               <span>{analysis.highGrowthSegments}</span>
@@ -362,36 +363,48 @@ const MarketAnalysisBoard = () => {
           <div className="analysis-card">
             <h3>Barrier Distribution</h3>
             <p>
-              Current challenges include high misdiagnosis rates, suboptimal treatment 
-              protocols, and fragmented care coordination systems.
+              Current challenges include regulatory compliance requirements, varying regional 
+              acceptance levels, and integration with existing healthcare protocols.
             </p>
             <div className="analysis-metric">
               <span>{Object.keys(analysis.barrierDistribution).length}</span>
               <small>Key Challenge Areas</small>
             </div>
             <div className="analysis-metric">
-              <span>£90K</span>
-              <small>Per Patient Impact</small>
+              <span>25%</span>
+              <small>Avg Med Reduction</small>
             </div>
           </div>
 
           <div className="analysis-card">
             <h3>Strategic Approach</h3>
             <p>
-              Success requires precision in patient identification through advanced 
-              biomarker analysis and streamlined diagnostic protocols, enabling 
-              targeted therapeutic interventions.
+              Success requires building clinical evidence bases, establishing dosing 
+              standards, and developing partnerships with healthcare providers for 
+              optimal patient outcomes.
             </p>
             <div className="analysis-metric">
               <span>{sortedSegments.length}</span>
               <small>Integrated Solutions</small>
             </div>
             <div className="analysis-metric">
-              <span>£1-2B</span>
-              <small>System-wide Savings</small>
+              <span>£1.2B</span>
+              <small>Medication Savings</small>
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Additional Healthcare Investment Opportunities */}
+      <div className="mt-12 mb-8">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">Related Healthcare Investment Opportunities</h2>
+        <p className="text-gray-600 mb-8">
+          Beyond the cannabis market's focus on medication reduction, these healthcare 
+          opportunities represent distinct investment paths with their own ROI metrics 
+          and implementation strategies. Each addresses specific healthcare system 
+          inefficiencies through diagnostic improvements and care optimization.
+        </p>
+        <OpportunityCards />
       </div>
 
       <InsightsDrawer
