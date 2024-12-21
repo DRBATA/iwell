@@ -5,13 +5,25 @@ import { MarketSegment } from './types';
 import ComparisonChart from './charts/ComparisonChart';
 import GrowthTrendChart from './charts/GrowthTrendChart';
 import BarrierTooltip from './components/BarrierTooltip';
+import InsightsDrawer from './components/InsightsDrawer';
 import './styles.css';
+
+interface MarketInsight {
+  id: string;
+  marketName: string;
+  barrierLevel: number;
+  barrierType: string;
+  insights: string[];
+  strategies: string[];
+}
 
 const MarketAnalysisBoard = () => {
   const [selectedSegments, setSelectedSegments] = useState<MarketSegment[]>([]);
   const [sortBy, setSortBy] = useState<'marketSize' | 'growthRate' | 'profitMargin'>('marketSize');
   const [filterBarriers, setFilterBarriers] = useState<number | null>(null);
   const [tooltipVisible, setTooltipVisible] = useState<string | null>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [savedInsights, setSavedInsights] = useState<MarketInsight[]>([]);
 
   const sortedSegments = useMemo(() => {
     let segments = [...(cannabinoidMarketData.children || [])];
@@ -40,6 +52,15 @@ const MarketAnalysisBoard = () => {
     } else if (selectedSegments.length < 2) {
       setSelectedSegments([...selectedSegments, segment]);
     }
+  };
+
+  const handleSaveInsight = (insight: MarketInsight) => {
+    setSavedInsights([...savedInsights, insight]);
+    setIsDrawerOpen(true);
+  };
+
+  const handleRemoveInsight = (id: string) => {
+    setSavedInsights(savedInsights.filter(insight => insight.id !== id));
   };
 
   const getMetricColor = (value: string) => {
@@ -97,13 +118,12 @@ const MarketAnalysisBoard = () => {
               ))}
             </select>
           </div>
-          {selectedSegments.length > 0 && (
-            <div className="px-4 py-2 bg-indigo-50 border border-indigo-200 rounded-lg text-sm font-medium text-indigo-700">
-              {selectedSegments.length === 2 ? 
-                'Click on segments to update comparison' :
-                'Select another segment to compare (max 2)'}
-            </div>
-          )}
+          <button
+            onClick={() => setIsDrawerOpen(true)}
+            className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-opacity-90 transition-colors"
+          >
+            View Saved Insights ({savedInsights.length})
+          </button>
         </div>
       </div>
 
@@ -138,7 +158,7 @@ const MarketAnalysisBoard = () => {
                 </div>
               </div>
               
-              <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
                 <span className="text-sm font-medium text-gray-700">Entry Barriers</span>
                 <div className="relative">
                   <span 
@@ -149,7 +169,11 @@ const MarketAnalysisBoard = () => {
                     {getBarrierLabel(segment.matrix?.rating?.barriers || 0)}
                   </span>
                   {tooltipVisible === segment.id && (
-                    <BarrierTooltip barrierLevel={segment.matrix?.rating?.barriers || 0} />
+                    <BarrierTooltip 
+                      barrierLevel={segment.matrix?.rating?.barriers || 0}
+                      marketName={segment.name}
+                      onSaveInsight={handleSaveInsight}
+                    />
                   )}
                 </div>
               </div>
@@ -183,7 +207,7 @@ const MarketAnalysisBoard = () => {
           {/* Detailed Metrics */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {selectedSegments.map((segment) => (
-              <div key={segment.id} className="space-y-6 p-6 bg-gray-50 rounded-lg border-2 border-gray-200">
+              <div key={segment.id} className="space-y-6 p-6 bg-gray-50 rounded-lg">
                 <div className="text-xl font-bold text-indigo-700 pb-4 border-b border-gray-200">
                   {segment.name}
                 </div>
@@ -209,7 +233,7 @@ const MarketAnalysisBoard = () => {
 
                 <div className="mt-6">
                   <div className="text-sm font-medium text-gray-600 mb-3">5-Year Growth Projection</div>
-                  <div className="flex items-center space-x-3 overflow-x-auto p-4 bg-white rounded-lg border border-gray-200">
+                  <div className="flex items-center space-x-3 overflow-x-auto p-4 bg-white rounded-lg">
                     {segment.projectedGrowth.map((value, index) => (
                       <div key={index} className="flex items-center">
                         {index > 0 && (
@@ -229,6 +253,13 @@ const MarketAnalysisBoard = () => {
           </div>
         </div>
       )}
+
+      <InsightsDrawer
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        savedInsights={savedInsights}
+        onRemoveInsight={handleRemoveInsight}
+      />
     </div>
   );
 };
