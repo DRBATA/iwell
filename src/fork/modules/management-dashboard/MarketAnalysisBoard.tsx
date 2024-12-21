@@ -4,12 +4,14 @@ import { cannabinoidMarketData } from './data';
 import { MarketSegment } from './types';
 import ComparisonChart from './charts/ComparisonChart';
 import GrowthTrendChart from './charts/GrowthTrendChart';
+import BarrierTooltip from './components/BarrierTooltip';
 import './styles.css';
 
 const MarketAnalysisBoard = () => {
   const [selectedSegments, setSelectedSegments] = useState<MarketSegment[]>([]);
   const [sortBy, setSortBy] = useState<'marketSize' | 'growthRate' | 'profitMargin'>('marketSize');
   const [filterBarriers, setFilterBarriers] = useState<number | null>(null);
+  const [tooltipVisible, setTooltipVisible] = useState<string | null>(null);
 
   const sortedSegments = useMemo(() => {
     let segments = [...(cannabinoidMarketData.children || [])];
@@ -140,9 +142,18 @@ const MarketAnalysisBoard = () => {
               
               <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg border border-gray-200">
                 <span className="text-sm font-medium text-gray-700">Entry Barriers</span>
-                <span className={getBarrierBadgeClass(segment.matrix?.rating?.barriers || 0)}>
-                  {getBarrierLabel(segment.matrix?.rating?.barriers || 0)}
-                </span>
+                <div className="relative">
+                  <span 
+                    className={`${getBarrierBadgeClass(segment.matrix?.rating?.barriers || 0)} cursor-help`}
+                    onMouseEnter={() => setTooltipVisible(segment.id)}
+                    onMouseLeave={() => setTooltipVisible(null)}
+                  >
+                    {getBarrierLabel(segment.matrix?.rating?.barriers || 0)}
+                  </span>
+                  {tooltipVisible === segment.id && (
+                    <BarrierTooltip barrierLevel={segment.matrix?.rating?.barriers || 0} />
+                  )}
+                </div>
               </div>
 
               <div className="pt-4 border-t border-gray-200">
