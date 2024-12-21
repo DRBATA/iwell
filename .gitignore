@@ -20,5 +20,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Archive
-/src/archive/
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
