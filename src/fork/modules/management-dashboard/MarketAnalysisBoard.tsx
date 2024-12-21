@@ -287,73 +287,96 @@ const MarketAnalysisBoard = () => {
           <div className="analysis-card">
             <h3>Market Overview</h3>
             <p>
-              The total addressable market across analyzed segments shows significant 
-              opportunity, with varying levels of accessibility and growth potential.
+              Beyond market size, significant healthcare costs and patient impact 
+              represent critical opportunities for system-wide improvement.
             </p>
             <div className="analysis-metric">
               <span>${analysis.totalMarketSize.toFixed(1)}B</span>
               <small>Total Market Size</small>
+            </div>
+            <div className="analysis-metric">
+              <span>$143-266B</span>
+              <small>Annual Healthcare Impact</small>
             </div>
           </div>
 
           <div className="analysis-card">
             <h3>Growth Dynamics</h3>
             <p>
-              Market segments demonstrate strong growth trajectories, particularly in 
-              areas with established regulatory frameworks and clear clinical pathways.
+              Tech-enabled solutions including rapid testing, mobile labs, and AI-guided 
+              diagnostics present transformative opportunities for care delivery.
             </p>
             <div className="analysis-metric">
               <span>{analysis.avgGrowthRate.toFixed(1)}%</span>
-              <small>Average Growth Rate</small>
+              <small>Growth Rate</small>
+            </div>
+            <div className="analysis-metric">
+              <span>$1B+</span>
+              <small>Tech Solution Opportunity</small>
             </div>
           </div>
 
           <div className="analysis-card">
             <h3>Entry Opportunity</h3>
             <p>
-              Several segments present favorable entry conditions, with established 
-              pathways that align well with healthcare service delivery experience.
+              Current misdiagnosis rates and delayed interventions indicate significant 
+              room for improved patient outcomes through better diagnostic protocols.
             </p>
             <div className="analysis-metric">
               <span>{analysis.lowBarrierSegments}</span>
-              <small>Low Barrier Segments</small>
+              <small>Accessible Segments</small>
+            </div>
+            <div className="analysis-metric">
+              <span>5-10%</span>
+              <small>Premium Impact</small>
             </div>
           </div>
 
           <div className="analysis-card">
             <h3>Market Dynamics</h3>
             <p>
-              High-growth segments often benefit from clinical evidence and quality 
-              frameworks, areas where healthcare expertise provides natural advantages.
+              Healthcare inefficiencies and parental productivity losses represent 
+              substantial opportunities for system-wide optimization.
             </p>
             <div className="analysis-metric">
               <span>{analysis.highGrowthSegments}</span>
-              <small>High Growth Segments</small>
+              <small>High Impact Segments</small>
+            </div>
+            <div className="analysis-metric">
+              <span>$45B</span>
+              <small>Annual Productivity Impact</small>
             </div>
           </div>
 
           <div className="analysis-card">
             <h3>Barrier Distribution</h3>
             <p>
-              Market entry barriers vary significantly, with opportunities to leverage 
-              existing healthcare delivery models and regulatory experience.
+              Current challenges include high misdiagnosis rates, suboptimal treatment 
+              protocols, and fragmented care coordination systems.
             </p>
             <div className="analysis-metric">
               <span>{Object.keys(analysis.barrierDistribution).length}</span>
-              <small>Barrier Levels Present</small>
+              <small>Key Challenge Areas</small>
+            </div>
+            <div className="analysis-metric">
+              <span>£90K</span>
+              <small>Per Patient Impact</small>
             </div>
           </div>
 
           <div className="analysis-card">
             <h3>Strategic Approach</h3>
             <p>
-              Success factors include quality-driven differentiation, evidence-based 
-              positioning, and effective stakeholder engagement - all aligned with 
-              healthcare service expertise.
+              Success requires balancing innovation with patient outcomes, focusing on 
+              early intervention, improved diagnostics, and integrated care pathways.
             </p>
             <div className="analysis-metric">
               <span>{sortedSegments.length}</span>
-              <small>Analyzed Segments</small>
+              <small>Integrated Solutions</small>
+            </div>
+            <div className="analysis-metric">
+              <span>£1-2B</span>
+              <small>System-wide Savings</small>
             </div>
           </div>
         </div>
