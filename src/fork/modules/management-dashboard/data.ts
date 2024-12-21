@@ -23,6 +23,15 @@ export const cannabinoidMarketData: MarketSegment = {
       lifetimeValue: "$50,000",
       revenuePerEmployee: "$600,000",
       projectedGrowth: [80, 87.6, 96.0, 105.1, 115.0],
+      matrix: {
+        rating: {
+          marketSize: 5,
+          accessibility: 4,
+          barriers: 3,
+          regulatory: 4
+        },
+        costSavings: "$20B/year"
+      }
     },
     {
       id: "cancer-treatment",
@@ -35,6 +44,15 @@ export const cannabinoidMarketData: MarketSegment = {
       lifetimeValue: "$45,000",
       revenuePerEmployee: "$550,000",
       projectedGrowth: [70, 75.6, 81.6, 88.1, 95.1],
+      matrix: {
+        rating: {
+          marketSize: 4,
+          accessibility: 3,
+          barriers: 4,
+          regulatory: 3
+        },
+        costSavings: "$1.2B/year"
+      }
     },
     {
       id: "anxiety-disorders",
@@ -47,6 +65,78 @@ export const cannabinoidMarketData: MarketSegment = {
       lifetimeValue: "$40,000",
       revenuePerEmployee: "$500,000",
       projectedGrowth: [60, 66.0, 72.6, 79.9, 87.9],
+      matrix: {
+        rating: {
+          marketSize: 4,
+          accessibility: 3,
+          barriers: 2,
+          regulatory: 2
+        },
+        costSavings: "$900M/year"
+      }
+    },
+    {
+      id: "neuropathic-pain",
+      name: "Neuropathic Pain",
+      marketSize: "$55B",
+      growthRate: "8.7% CAGR",
+      keyMetric: "$800 Savings per Patient on Anticonvulsants",
+      profitMargin: "34%",
+      customerAcquisitionCost: "$1,700",
+      lifetimeValue: "$38,000",
+      revenuePerEmployee: "$480,000",
+      projectedGrowth: [55, 59.8, 65.0, 70.7, 76.8],
+      matrix: {
+        rating: {
+          marketSize: 3,
+          accessibility: 2,
+          barriers: 4,
+          regulatory: 3
+        },
+        costSavings: "$800M/year"
+      }
+    },
+    {
+      id: "sleep-disorders",
+      name: "Sleep Disorders",
+      marketSize: "$50B",
+      growthRate: "9.0% CAGR",
+      keyMetric: "15% Reduction in Prescription Sleep Aid Usage",
+      profitMargin: "37%",
+      customerAcquisitionCost: "$1,200",
+      lifetimeValue: "$30,000",
+      revenuePerEmployee: "$450,000",
+      projectedGrowth: [50, 54.5, 59.4, 64.7, 70.6],
+      matrix: {
+        rating: {
+          marketSize: 3,
+          accessibility: 4,
+          barriers: 2,
+          regulatory: 2
+        },
+        costSavings: "$600M/year"
+      }
+    },
+    {
+      id: "fibromyalgia",
+      name: "Fibromyalgia",
+      marketSize: "$45B",
+      growthRate: "8.5% CAGR",
+      keyMetric: "10% Reduction in Polypharmacy Costs",
+      profitMargin: "36%",
+      customerAcquisitionCost: "$1,900",
+      lifetimeValue: "$35,000",
+      revenuePerEmployee: "$470,000",
+      projectedGrowth: [45, 48.8, 53.0, 57.5, 62.4],
+      matrix: {
+        rating: {
+          marketSize: 3,
+          accessibility: 2,
+          barriers: 3,
+          regulatory: 3
+        },
+        costSavings: "$500M/year"
+      }
     },
     {
       id: "ptsd",
@@ -59,54 +149,36 @@ export const cannabinoidMarketData: MarketSegment = {
       lifetimeValue: "$35,000",
       revenuePerEmployee: "$400,000",
       projectedGrowth: [40, 42.8, 45.8, 49.0, 52.4],
-    },
-    {
-      id: "sleep-disorders",
-      name: "Sleep Disorders",
-      marketSize: "$50B",
-      growthRate: "9.0% CAGR",
-      keyMetric: "15% Reduction in Prescription Sleep Aid Usage",
-      profitMargin: "37%",
-      customerAcquisitionCost: "$1,200",
-      lifetimeValue: "$30,000",
-      revenuePerEmployee: "$450,000",
-      projectedGrowth: [50, 54.5, 59.4, 64.8, 70.6],
-    },
-    {
-      id: "fibromyalgia",
-      name: "Fibromyalgia",
-      marketSize: "$45B",
-      growthRate: "8.5% CAGR",
-      keyMetric: "10% Reduction in Polypharmacy Costs",
-      profitMargin: "36%",
-      customerAcquisitionCost: "$1,700",
-      lifetimeValue: "$28,000",
-      revenuePerEmployee: "$420,000",
-      projectedGrowth: [45, 48.8, 52.9, 57.4, 62.2],
-    },
-    {
-      id: "neuropathic-pain",
-      name: "Neuropathic Pain",
-      marketSize: "$55B",
-      growthRate: "8.7% CAGR",
-      keyMetric: "$800 Savings per Patient on Anticonvulsants",
-      profitMargin: "34%",
-      customerAcquisitionCost: "$1,600",
-      lifetimeValue: "$32,000",
-      revenuePerEmployee: "$480,000",
-      projectedGrowth: [55, 59.8, 65.0, 70.7, 76.9],
+      matrix: {
+        rating: {
+          marketSize: 2,
+          accessibility: 2,
+          barriers: 4,
+          regulatory: 3
+        },
+        costSavings: "$600M/year"
+      }
     },
     {
       id: "autism",
       name: "Autism Spectrum Disorders",
       marketSize: "$30B",
       growthRate: "7.8% CAGR",
-      keyMetric: "$12,000 Reduction in Behavioral Intervention Costs",
+      keyMetric: "25% Improvement in Sleep Quality Metrics",
       profitMargin: "32%",
-      customerAcquisitionCost: "$3,000",
-      lifetimeValue: "$50,000",
-      revenuePerEmployee: "$300,000",
-      projectedGrowth: [30, 32.3, 34.8, 37.5, 40.5],
+      customerAcquisitionCost: "$2,500",
+      lifetimeValue: "$42,000",
+      revenuePerEmployee: "$420,000",
+      projectedGrowth: [30, 32.3, 34.8, 37.5, 40.4],
+      matrix: {
+        rating: {
+          marketSize: 2,
+          accessibility: 1,
+          barriers: 5,
+          regulatory: 4
+        },
+        costSavings: "$400M/year"
+      }
     }
   ]
 };

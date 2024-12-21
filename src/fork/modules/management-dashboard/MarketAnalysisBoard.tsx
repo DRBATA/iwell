@@ -4,6 +4,7 @@ import { cannabinoidMarketData } from './data';
 import { MarketSegment } from './types';
 import ComparisonChart from './charts/ComparisonChart';
 import GrowthTrendChart from './charts/GrowthTrendChart';
+import './styles.css';
 
 const MarketAnalysisBoard = () => {
   const [selectedSegments, setSelectedSegments] = useState<MarketSegment[]>([]);
@@ -41,9 +42,9 @@ const MarketAnalysisBoard = () => {
 
   const getMetricColor = (value: string) => {
     const numValue = parseFloat(value.replace(/[^0-9.]/g, ''));
-    if (numValue > 10) return 'text-green-600 bg-green-50';
-    if (numValue > 5) return 'text-yellow-600 bg-yellow-50';
-    return 'text-red-600 bg-red-50';
+    if (numValue > 10) return 'metric-high';
+    if (numValue > 5) return 'metric-medium';
+    return 'metric-low';
   };
 
   const getBarrierLabel = (value: number) => {
@@ -54,7 +55,7 @@ const MarketAnalysisBoard = () => {
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       {/* Controls */}
-      <div className="mb-8 bg-white p-6 rounded-xl shadow-lg">
+      <div className="mb-8 bg-white p-6 rounded-xl shadow-lg border-2 border-gray-200">
         <h2 className="text-xl font-bold text-gray-900 mb-4">Market Analysis Controls</h2>
         <div className="flex flex-wrap gap-6 items-center">
           <div className="min-w-[200px]">
@@ -93,7 +94,7 @@ const MarketAnalysisBoard = () => {
             </select>
           </div>
           {selectedSegments.length > 0 && (
-            <div className="text-sm text-gray-600">
+            <div className="text-sm font-medium text-indigo-600 bg-indigo-50 px-4 py-2 rounded-full">
               {selectedSegments.length === 2 ? 
                 'Click on segments to update comparison' :
                 'Select another segment to compare (max 2)'}
@@ -107,42 +108,42 @@ const MarketAnalysisBoard = () => {
         {sortedSegments.map((segment) => (
           <Card
             key={segment.id}
-            className={`p-6 cursor-pointer transition-all transform hover:-translate-y-1 ${
+            className={`segment-card ${
               selectedSegments.find(s => s.id === segment.id)
-                ? 'ring-2 ring-indigo-500 shadow-xl bg-indigo-50'
-                : 'hover:shadow-lg hover:bg-gray-50'
+                ? 'segment-card-selected'
+                : 'segment-card-default'
             }`}
             onClick={() => toggleSegmentSelection(segment)}
           >
             <div className="flex justify-between items-start mb-4">
               <h3 className="text-xl font-bold text-gray-900">{segment.name}</h3>
-              <span className={`text-lg font-semibold px-3 py-1 rounded-full ${getMetricColor(segment.growthRate)}`}>
+              <span className={`metric-value ${getMetricColor(segment.growthRate)}`}>
                 {segment.growthRate}
               </span>
             </div>
             
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                <div className="p-3 bg-gray-50 rounded-lg">
-                  <div className="text-sm text-gray-600">Market Size</div>
-                  <div className="text-lg font-semibold">{segment.marketSize}</div>
+                <div className="metric-card">
+                  <div className="text-sm font-medium text-gray-600">Market Size</div>
+                  <div className="text-lg font-bold text-gray-900">{segment.marketSize}</div>
                 </div>
-                <div className="p-3 bg-gray-50 rounded-lg">
-                  <div className="text-sm text-gray-600">Profit Margin</div>
-                  <div className="text-lg font-semibold">{segment.profitMargin}</div>
+                <div className="metric-card">
+                  <div className="text-sm font-medium text-gray-600">Profit Margin</div>
+                  <div className="text-lg font-bold text-gray-900">{segment.profitMargin}</div>
                 </div>
               </div>
               
-              <div className="flex justify-between items-center p-3 bg-indigo-50 rounded-lg">
-                <span className="text-sm text-gray-600">Entry Barriers</span>
-                <span className="font-medium px-3 py-1 bg-white rounded-full shadow-sm">
+              <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <span className="text-sm font-medium text-gray-700">Entry Barriers</span>
+                <span className={`barrier-badge barrier-badge-${segment.matrix?.rating?.barriers || 0}`}>
                   {getBarrierLabel(segment.matrix?.rating?.barriers || 0)}
                 </span>
               </div>
 
-              <div className="pt-4 border-t">
-                <div className="text-sm text-gray-600 mb-2">Key Performance Indicator</div>
-                <div className="font-medium text-indigo-600">{segment.keyMetric}</div>
+              <div className="pt-4 border-t border-gray-200">
+                <div className="text-sm font-medium text-gray-600 mb-2">Key Performance Indicator</div>
+                <div className="font-medium text-indigo-700">{segment.keyMetric}</div>
               </div>
             </div>
           </Card>
@@ -151,16 +152,16 @@ const MarketAnalysisBoard = () => {
 
       {/* Comparison Section */}
       {selectedSegments.length > 0 && (
-        <div className="mt-8 bg-white rounded-xl shadow-xl p-8">
-          <h2 className="text-2xl font-bold mb-6">Detailed Comparison</h2>
+        <div className="comparison-section">
+          <h2 className="text-2xl font-bold mb-6 text-gray-900">Detailed Comparison</h2>
           
           {/* Visual Comparisons */}
           <div className="space-y-8 mb-8">
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="chart-container">
               <h3 className="text-lg font-semibold text-gray-700 mb-4">Metric Comparison</h3>
               <ComparisonChart segments={selectedSegments} />
             </div>
-            <div className="bg-gray-50 p-6 rounded-lg">
+            <div className="chart-container">
               <h3 className="text-lg font-semibold text-gray-700 mb-4">Growth Trajectory</h3>
               <GrowthTrendChart segments={selectedSegments} />
             </div>
@@ -169,33 +170,33 @@ const MarketAnalysisBoard = () => {
           {/* Detailed Metrics */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {selectedSegments.map((segment) => (
-              <div key={segment.id} className="space-y-6 p-6 bg-gray-50 rounded-lg">
-                <div className="text-xl font-bold text-indigo-600 pb-4 border-b">
+              <div key={segment.id} className="space-y-6 p-6 bg-gray-50 rounded-lg border-2 border-gray-200">
+                <div className="text-xl font-bold text-indigo-700 pb-4 border-b border-gray-200">
                   {segment.name}
                 </div>
                 
                 <div className="grid grid-cols-2 gap-6">
-                  <div className="p-4 bg-white rounded-lg shadow-sm">
-                    <div className="text-sm text-gray-600 mb-1">Market Size</div>
-                    <div className="text-xl font-bold">{segment.marketSize}</div>
+                  <div className="metric-card">
+                    <div className="text-sm font-medium text-gray-600 mb-1">Market Size</div>
+                    <div className="text-xl font-bold text-gray-900">{segment.marketSize}</div>
                   </div>
-                  <div className="p-4 bg-white rounded-lg shadow-sm">
-                    <div className="text-sm text-gray-600 mb-1">Growth Rate</div>
-                    <div className="text-xl font-bold">{segment.growthRate}</div>
+                  <div className="metric-card">
+                    <div className="text-sm font-medium text-gray-600 mb-1">Growth Rate</div>
+                    <div className="text-xl font-bold text-gray-900">{segment.growthRate}</div>
                   </div>
-                  <div className="p-4 bg-white rounded-lg shadow-sm">
-                    <div className="text-sm text-gray-600 mb-1">CAC</div>
-                    <div className="text-xl font-bold">{segment.customerAcquisitionCost}</div>
+                  <div className="metric-card">
+                    <div className="text-sm font-medium text-gray-600 mb-1">CAC</div>
+                    <div className="text-xl font-bold text-gray-900">{segment.customerAcquisitionCost}</div>
                   </div>
-                  <div className="p-4 bg-white rounded-lg shadow-sm">
-                    <div className="text-sm text-gray-600 mb-1">LTV</div>
-                    <div className="text-xl font-bold">{segment.lifetimeValue}</div>
+                  <div className="metric-card">
+                    <div className="text-sm font-medium text-gray-600 mb-1">LTV</div>
+                    <div className="text-xl font-bold text-gray-900">{segment.lifetimeValue}</div>
                   </div>
                 </div>
 
                 <div className="mt-6">
-                  <div className="text-sm text-gray-600 mb-3">5-Year Growth Projection</div>
-                  <div className="flex items-center space-x-3 overflow-x-auto p-4 bg-white rounded-lg shadow-sm">
+                  <div className="text-sm font-medium text-gray-600 mb-3">5-Year Growth Projection</div>
+                  <div className="flex items-center space-x-3 overflow-x-auto p-4 bg-white rounded-lg border border-gray-200">
                     {segment.projectedGrowth.map((value, index) => (
                       <div key={index} className="flex items-center">
                         {index > 0 && (
@@ -203,7 +204,7 @@ const MarketAnalysisBoard = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                           </svg>
                         )}
-                        <span className={`text-lg font-bold ${getMetricColor(value.toString())} px-3 py-1 rounded-full`}>
+                        <span className={`metric-value ${getMetricColor(value.toString())}`}>
                           ${value}B
                         </span>
                       </div>
