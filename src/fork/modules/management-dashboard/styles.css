@@ -25,7 +25,7 @@
 
 .barrier-badge-3 {
   background-color: var(--warning-yellow);
-  @apply text-dark-gray border-0;
+  @apply text-gray-800 border-0;
 }
 
 .barrier-badge-4 {
@@ -65,7 +65,7 @@
 
 .metric-medium {
   background-color: var(--warning-yellow);
-  @apply text-dark-gray;
+  @apply text-gray-800;
 }
 
 .metric-low {
@@ -84,27 +84,27 @@
 }
 
 .metric-card {
-  @apply p-4 rounded-lg shadow-sm border transition-colors;
-  background-color: var(--light-gray);
-  border-color: var(--dark-gray);
+  @apply p-4 rounded-lg shadow-md transition-all;
+  background-color: white;
+  border: 1px solid var(--light-gray);
 }
 
 .metric-card:hover {
+  @apply shadow-lg;
   border-color: var(--accent-teal);
 }
 
 /* Enhanced Select Styles */
 select {
-  @apply appearance-none text-sm rounded-lg block w-full p-2.5;
+  @apply appearance-none text-sm rounded-lg block w-full p-3 shadow-sm;
   background-color: white;
   border: 2px solid var(--primary-blue);
   color: var(--dark-gray);
 }
 
 select:focus {
-  @apply outline-none;
+  @apply outline-none shadow-md;
   border-color: var(--accent-teal);
-  box-shadow: 0 0 0 2px rgba(1, 180, 188, 0.2);
 }
 
 select option {
@@ -119,14 +119,14 @@ select option:hover {
 
 /* Control Section Styles */
 .control-section {
-  @apply p-6 rounded-xl shadow-lg border-2;
+  @apply p-6 rounded-xl shadow-lg mb-8;
   background-color: white;
-  border-color: var(--primary-blue);
+  border: 2px solid var(--primary-blue);
 }
 
 .control-label {
   @apply block text-sm font-medium mb-2;
-  color: var(--dark-gray);
+  color: var(--primary-blue);
 }
 
 .control-select {
@@ -137,54 +137,47 @@ select option:hover {
   @apply flex flex-wrap gap-6 items-center;
 }
 
-/* Dropdown Menu Container */
-.select-container {
-  @apply relative;
+/* Natural Analysis Section */
+.natural-analysis {
+  @apply mt-12 p-8 rounded-xl bg-gradient-to-br from-white to-gray-50;
+  border: 2px solid var(--accent-teal);
 }
 
-.select-container select:focus + .select-dropdown {
-  @apply block;
+.natural-analysis h2 {
+  @apply text-2xl font-bold mb-6;
+  color: var(--primary-blue);
 }
 
-.select-dropdown {
-  @apply absolute w-full mt-1 rounded-lg shadow-lg border z-50;
-  background-color: white;
-  border-color: var(--primary-blue);
-  max-height: 250px;
-  overflow-y: auto;
+.analysis-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8;
 }
 
-.select-dropdown option {
-  @apply px-4 py-2 cursor-pointer transition-colors;
+.analysis-card {
+  @apply p-6 rounded-xl bg-white shadow-lg;
+  border: 1px solid var(--light-gray);
+}
+
+.analysis-card h3 {
+  @apply text-lg font-semibold mb-3;
   color: var(--dark-gray);
 }
 
-.select-dropdown option:hover {
+.analysis-card p {
+  @apply text-sm leading-relaxed;
+  color: var(--dark-gray);
+}
+
+.analysis-metric {
+  @apply mt-4 p-3 rounded-lg text-center;
   background-color: var(--light-gray);
 }
 
-/* Headers */
-h2 {
+.analysis-metric span {
+  @apply block text-2xl font-bold;
   color: var(--primary-blue);
 }
 
-h3 {
+.analysis-metric small {
+  @apply text-sm;
   color: var(--dark-gray);
-}
-
-/* Text Colors */
-.text-primary {
-  color: var(--primary-blue);
-}
-
-.text-accent {
-  color: var(--accent-teal);
-}
-
-.text-success {
-  color: var(--success-green);
-}
-
-.text-info {
-  color: var(--info-blue);
 }
