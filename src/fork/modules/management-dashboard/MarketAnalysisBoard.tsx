@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Card } from '../../../components/ui/card';
+import Card from './components/Card';
 import { cannabinoidMarketData } from './data';
 import { MarketSegment } from './types';
 import ComparisonChart from './charts/ComparisonChart';
