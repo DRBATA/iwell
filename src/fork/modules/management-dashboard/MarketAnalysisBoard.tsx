@@ -26,16 +26,33 @@ const MarketAnalysisBoard = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [savedInsights, setSavedInsights] = useState<MarketInsight[]>([]);
 
+  // Get all segments with their barrier information
+  const allSegments = useMemo(() => {
+    const segments = cannabinoidMarketData.children || [];
+    console.log('Loading segments:', segments.map(s => ({
+      name: s.name,
+      barrier: s.matrix?.rating?.barriers,
+      matrix: s.matrix
+    })));
+    return segments;
+  }, []);
+
+  // Filter and sort segments
   const sortedSegments = useMemo(() => {
-    let segments = [...(cannabinoidMarketData.children || [])];
+    // Start with all segments
+    let segments = allSegments;
     
+    // Apply barrier filter if selected
     if (filterBarriers !== null) {
-      segments = segments.filter(segment => 
-        segment.matrix?.rating?.barriers === filterBarriers
-      );
+      segments = segments.filter(segment => {
+        const barrierLevel = segment.matrix?.rating?.barriers;
+        console.log(`Filtering ${segment.name}: level=${barrierLevel}, target=${filterBarriers}`);
+        return barrierLevel === filterBarriers;
+      });
     }
 
-    return segments.sort((a, b) => {
+    // Sort filtered segments
+    return [...segments].sort((a, b) => {
       if (sortBy === 'marketSize') {
         return parseFloat(b.marketSize.replace(/[^0-9.]/g, '')) - 
                parseFloat(a.marketSize.replace(/[^0-9.]/g, ''));
@@ -71,9 +88,11 @@ const MarketAnalysisBoard = () => {
     return 'metric-low';
   };
 
-  const getBarrierLabel = (value: number) => {
+  const getBarrierLabel = (segment: MarketSegment) => {
+    const value = segment.matrix?.rating?.barriers;
+    if (!value) return 'Unknown';
     const labels = ['Very Low', 'Low', 'Moderate', 'High', 'Very High'];
-    return labels[value - 1] || 'Unknown';
+    return labels[value - 1];
   };
 
   const getBarrierBadgeClass = (value: number) => {
@@ -136,12 +155,20 @@ const MarketAnalysisBoard = () => {
               id="barriers"
               name="barriers"
               value={filterBarriers || ''}
-              onChange={(e) => setFilterBarriers(e.target.value ? Number(e.target.value) : null)}
+              onChange={(e) => {
+                const value = e.target.value;
+                const numValue = value === '' ? null : parseInt(value, 10);
+                console.log('Setting barrier filter:', { raw: value, parsed: numValue });
+                setFilterBarriers(numValue);
+              }}
               aria-label="Filter by barrier level"
             >
               <option value="">All Barrier Levels</option>
               {[1, 2, 3, 4, 5].map(value => (
-                <option key={value} value={value}>{getBarrierLabel(value)}</option>
+                <option key={value} value={value.toString()}>
+                  {['Very Low', 'Low', 'Moderate', 'High', 'Very High'][value - 1]} 
+                  ({value})
+                </option>
               ))}
             </select>
           </div>
@@ -155,7 +182,12 @@ const MarketAnalysisBoard = () => {
       </div>
 
       {/* Market Segments Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Market Segments Grid - Show total count */}
+      <div className="mb-4 text-sm text-gray-600">
+        Showing {sortedSegments.length} market segments
+        {filterBarriers !== null && ` with ${['Very Low', 'Low', 'Moderate', 'High', 'Very High'][filterBarriers - 1]} barriers`}
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {sortedSegments.map((segment) => (
           <Card
             key={segment.id}
@@ -188,13 +220,41 @@ const MarketAnalysisBoard = () => {
               <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
                 <span className="text-sm font-medium text-gray-700">Entry Barriers</span>
                 <div className="relative">
-                  <span 
-                    className={`${getBarrierBadgeClass(segment.matrix?.rating?.barriers || 0)} cursor-help`}
-                    onMouseEnter={() => setTooltipVisible(segment.id)}
-                    onMouseLeave={() => setTooltipVisible(null)}
-                  >
-                    {getBarrierLabel(segment.matrix?.rating?.barriers || 0)}
-                  </span>
+                  {(() => {
+                    const barrierLevel = segment.matrix?.rating?.barriers;
+                    const barrierLabel = barrierLevel ? 
+                      ['Very Low', 'Low', 'Moderate', 'High', 'Very High'][barrierLevel - 1] 
+                      : 'Unknown';
+                    
+                    return (
+                      <div className="flex flex-col items-end gap-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-gray-500">Hover for details</span>
+                          <span 
+                            className={`${getBarrierBadgeClass(barrierLevel || 0)} cursor-help`}
+                            onMouseEnter={() => setTooltipVisible(segment.id)}
+                            onMouseLeave={() => setTooltipVisible(null)}
+                          >
+                            {barrierLabel}
+                          </span>
+                        </div>
+                        {barrierLevel && (
+                          <div className="flex flex-col items-end gap-1">
+                            <span className="text-xs text-gray-400">
+                              Level {barrierLevel} of 5
+                            </span>
+                            <div className="text-xs text-gray-400">
+                              {barrierLevel === 1 && "Strong market data • Established pathways"}
+                              {barrierLevel === 2 && "Growing market • Moderate competition"}
+                              {barrierLevel === 3 && "Market education • Complex requirements"}
+                              {barrierLevel === 4 && "High capital • Complex stakeholders"}
+                              {barrierLevel === 5 && "Limited access • Intensive oversight"}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })()}
                   {tooltipVisible === segment.id && (
                     <BarrierTooltip 
                       barrierLevel={segment.matrix?.rating?.barriers || 0}
