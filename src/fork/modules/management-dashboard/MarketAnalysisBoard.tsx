@@ -267,8 +267,8 @@ const MarketAnalysisBoard = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                           </svg>
                         )}
-                        <span className={`metric-value ${getMetricColor(value.toString())}`}>
-                          ${value}B
+                          <span className={`metric-value ${getMetricColor(value.toString())}`}>
+                          £{value}B
                         </span>
                       </div>
                     ))}
@@ -287,40 +287,43 @@ const MarketAnalysisBoard = () => {
           <div className="analysis-card">
             <h3>Market Overview</h3>
             <p>
-              Beyond market size, significant healthcare costs and patient impact 
-              represent critical opportunities for system-wide improvement.
+              Targeted diagnostic protocols could save £2,500 per case in 
+              administrative overhead, while reducing overall healthcare costs 
+              by £1-2B through optimized pathways.
             </p>
             <div className="analysis-metric">
-              <span>${analysis.totalMarketSize.toFixed(1)}B</span>
+              <span>£{analysis.totalMarketSize.toFixed(1)}B</span>
               <small>Total Market Size</small>
             </div>
             <div className="analysis-metric">
-              <span>$143-266B</span>
-              <small>Annual Healthcare Impact</small>
+              <span>£1-2B</span>
+              <small>System-wide Impact</small>
             </div>
           </div>
 
           <div className="analysis-card">
             <h3>Growth Dynamics</h3>
             <p>
-              Tech-enabled solutions including rapid testing, mobile labs, and AI-guided 
-              diagnostics present transformative opportunities for care delivery.
+              Early intervention through advanced biomarker screening could prevent 
+              £90K per patient in long-term treatment costs, particularly in 
+              complex neuropsychiatric cases.
             </p>
             <div className="analysis-metric">
               <span>{analysis.avgGrowthRate.toFixed(1)}%</span>
               <small>Growth Rate</small>
             </div>
             <div className="analysis-metric">
-              <span>$1B+</span>
-              <small>Tech Solution Opportunity</small>
+              <span>£90K</span>
+              <small>Per-Patient Impact</small>
             </div>
           </div>
 
           <div className="analysis-card">
             <h3>Entry Opportunity</h3>
             <p>
-              Current misdiagnosis rates and delayed interventions indicate significant 
-              room for improved patient outcomes through better diagnostic protocols.
+              Streamlined PANDAS screening could save £2,000 per child in 
+              long-term therapy costs by enabling early intervention and 
+              preventing severe complications.
             </p>
             <div className="analysis-metric">
               <span>{analysis.lowBarrierSegments}</span>
@@ -335,16 +338,17 @@ const MarketAnalysisBoard = () => {
           <div className="analysis-card">
             <h3>Market Dynamics</h3>
             <p>
-              Healthcare inefficiencies and parental productivity losses represent 
-              substantial opportunities for system-wide optimization.
+              Integration of rapid diagnostic protocols could reduce treatment 
+              costs by £50-100M annually through precise patient identification 
+              and targeted interventions.
             </p>
             <div className="analysis-metric">
               <span>{analysis.highGrowthSegments}</span>
               <small>High Impact Segments</small>
             </div>
             <div className="analysis-metric">
-              <span>$45B</span>
-              <small>Annual Productivity Impact</small>
+              <span>£50-100M</span>
+              <small>Annual Treatment Savings</small>
             </div>
           </div>
 
@@ -367,8 +371,9 @@ const MarketAnalysisBoard = () => {
           <div className="analysis-card">
             <h3>Strategic Approach</h3>
             <p>
-              Success requires balancing innovation with patient outcomes, focusing on 
-              early intervention, improved diagnostics, and integrated care pathways.
+              Success requires precision in patient identification through advanced 
+              biomarker analysis and streamlined diagnostic protocols, enabling 
+              targeted therapeutic interventions.
             </p>
             <div className="analysis-metric">
               <span>{sortedSegments.length}</span>
