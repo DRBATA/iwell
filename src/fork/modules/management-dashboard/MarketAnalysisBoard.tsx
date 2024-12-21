@@ -52,6 +52,10 @@ const MarketAnalysisBoard = () => {
     return labels[value - 1] || 'Unknown';
   };
 
+  const getBarrierBadgeClass = (value: number) => {
+    return `barrier-badge barrier-badge-${value}`;
+  };
+
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       {/* Controls */}
@@ -136,7 +140,7 @@ const MarketAnalysisBoard = () => {
               
               <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg border border-gray-200">
                 <span className="text-sm font-medium text-gray-700">Entry Barriers</span>
-                <span className={`barrier-badge barrier-badge-${segment.matrix?.rating?.barriers || 0}`}>
+                <span className={getBarrierBadgeClass(segment.matrix?.rating?.barriers || 0)}>
                   {getBarrierLabel(segment.matrix?.rating?.barriers || 0)}
                 </span>
               </div>
