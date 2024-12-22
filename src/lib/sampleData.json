@@ -1,0 +1,86 @@
+{
+  "hsj_id": "847392",
+  "bloodPressure": {
+    "monitoring": "Yes, regularly",
+    "readings": [],
+    "lastUpdated": "2024-01-15T08:30:00Z",
+    "trackingNeeds": {
+      "dailyMetrics": [
+        {
+          "name": "Blood pressure",
+          "frequency": "daily",
+          "type": "numeric",
+          "unit": "mmHg",
+          "components": ["systolic", "diastolic"],
+          "limits": {
+            "systolic": { "min": 70, "max": 190 },
+            "diastolic": { "min": 40, "max": 120 }
+          }
+        },
+        {
+          "name": "Pulse",
+          "frequency": "daily",
+          "type": "numeric",
+          "unit": "bpm",
+          "limits": { "min": 40, "max": 200 }
+        }
+      ]
+    }
+  },
+  "conditions": [
+    {
+      "name": "Hypertension",
+      "trackingNeeds": {
+        "periodicTests": [
+          {
+            "name": "Kidney function",
+            "frequency": "quarterly",
+            "type": "lab",
+            "components": ["creatinine", "eGFR"],
+            "nextDue": "2024-03-15"
+          }
+        ]
+      }
+    }
+  ],
+  "cognitive": {
+    "enabled": true,
+    "trackingNeeds": {
+      "dailyMetrics": [
+        {
+          "name": "Mood",
+          "frequency": "daily",
+          "type": "scale",
+          "range": [1, 5]
+        },
+        {
+          "name": "Sleep Quality",
+          "frequency": "daily",
+          "type": "scale",
+          "range": [1, 5]
+        }
+      ]
+    }
+  },
+  "labResults": {
+    "results": [
+      {
+        "name": "Comprehensive Metabolic Panel",
+        "components": [
+          {
+            "name": "Creatinine",
+            "value": 1.1,
+            "unit": "mg/dL",
+            "range": { "min": 0.7, "max": 1.3 }
+          },
+          {
+            "name": "eGFR",
+            "value": 75,
+            "unit": "mL/min/1.73m²",
+            "range": { "min": 60, "max": null }
+          }
+        ]
+      }
+    ]
+  }
+}

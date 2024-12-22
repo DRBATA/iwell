@@ -1,0 +1,124 @@
+// Archive of original context.tsx before removing loadHSJ from importData
+// Reason: Testing if we can load directly from file data without storage
+
+import React, { createContext, useContext, useCallback } from 'react';
+import { hsjManager } from './manager';
+import { 
+  HSJManifest, 
+  HSJHealthData, 
+  HSJExportPackage,
+  HSJContextValue,
+  DataUpdate
+} from './types';
+
+const HSJContext = createContext<HSJContextValue | null>(null);
+
+export const useHSJ = () => {
+  const context = useContext(HSJContext);
+  if (!context) {
+    throw new Error('useHSJ must be used within a HSJProvider');
+  }
+  return context;
+};
+
+interface HSJProviderProps {
+  children: React.ReactNode;
+}
+
+export const HSJProvider: React.FC<HSJProviderProps> = ({ children }) => {
+  const [manifest, setManifest] = React.useState<HSJManifest | null>(null);
+  const [healthData, setHealthData] = React.useState<HSJHealthData | null>(null);
+
+  // Initialize HSJ system
+  React.useEffect(() => {
+    const init = async () => {
+      await hsjManager.initialize();
+    };
+    init();
+  }, []);
+
+  // Create new HSJ - no auto manifest setting
+  const createHSJ = useCallback(async (data: { postcode: string; dob: string; }) => {
+    const result = await hsjManager.createNewHSJ(data);
+    return result;
+  }, []);
+
+  // Load existing HSJ
+  const loadHSJ = useCallback(async (hsj_id: string) => {
+    const { manifest: newManifest, healthData: newHealthData } = await hsjManager.loadHSJ(hsj_id);
+    setManifest(newManifest);
+    setHealthData(newHealthData);
+  }, []);
+
+  // Update manifest
+  const updateManifest = useCallback(async (update: Partial<HSJManifest>) => {
+    if (!manifest) {
+      throw new Error('No HSJ currently loaded');
+    }
+    const updatedManifest = { ...manifest, ...update };
+    setManifest(updatedManifest);
+  }, [manifest]);
+
+  // Update health data
+  const updateHealthData = useCallback(async (update: DataUpdate) => {
+    const result = await hsjManager.updateHealthData(update);
+    if (result.valid) {
+      const currentHSJId = hsjManager.getCurrentHSJId();
+      if (currentHSJId) {
+        const { healthData: newHealthData } = await hsjManager.loadHSJ(currentHSJId);
+        setHealthData(newHealthData);
+      }
+    }
+    return result;
+  }, []);
+
+  // Eject data
+  const ejectData = useCallback(async () => {
+    const exportPackage = await hsjManager.ejectHSJ();
+    setManifest(null);
+    setHealthData(null);
+    return exportPackage;
+  }, []);
+
+  // Import data
+  const importData = useCallback(async (data: HSJExportPackage) => {
+    // This tries to load from storage which might be empty
+    await hsjManager.loadHSJ(data.manifest.hsj_id);
+    setManifest(data.manifest);
+    setHealthData(data.healthData);
+  }, []);
+
+  // Verify PIN
+  const verifyPin = useCallback(async (pin: string, hsj_id: string) => {
+    return hsjManager.verifyPin(pin, hsj_id);
+  }, []);
+
+  const value = React.useMemo(() => ({
+    manifest,
+    healthData,
+    setManifest,
+    createHSJ,
+    loadHSJ,
+    updateManifest,
+    updateHealthData,
+    ejectData,
+    importData,
+    verifyPin
+  }), [
+    manifest,
+    healthData,
+    createHSJ,
+    loadHSJ,
+    updateManifest,
+    updateHealthData,
+    ejectData,
+    importData,
+    verifyPin
+  ]);
+
+  return (
+    <HSJContext.Provider value={value}>
+      {children}
+    </HSJContext.Provider>
+  );
+};

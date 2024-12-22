@@ -20,70 +20,70 @@ const BarrierTooltip: React.FC<BarrierTooltipProps> = ({ barrierLevel, marketNam
         return {
           type: 'Low Entry Barriers',
           insights: [
-            'Basic approval process to follow',
-            'Clear market opportunity exists',
-            'Manageable startup costs'
+            'Fast-track approval stages',
+            'Market entry windows',
+            'Resource scaling points'
           ],
           strategies: [
-            'Plan your approval path',
-            'Check market readiness',
-            'Set up efficiently'
+            'Approval stage mapping',
+            'Entry window analysis',
+            'Resource stage mapping'
           ]
         };
       case 2:
         return {
           type: 'Moderate-Low Barriers',
           insights: [
-            'More oversight to navigate',
-            'Room for market growth',
-            'Competition to consider'
+            'Growth acceleration zones',
+            'Competition gaps',
+            'Market timing windows'
           ],
           strategies: [
-            'Build your compliance',
-            'Find your opportunities',
-            'Position effectively'
+            'Growth zone mapping',
+            'Gap analysis framework',
+            'Window sequence mapping'
           ]
         };
       case 3:
         return {
           type: 'Moderate Barriers',
           insights: [
-            'Complex rules to handle',
-            'Market needs education',
-            'Strong competitors exist'
+            'Regulatory staging gates',
+            'Education program targets',
+            'Competition white space'
           ],
           strategies: [
-            'Handle complex rules',
-            'Build market acceptance',
-            'Stand out clearly'
+            'Gate sequence mapping',
+            'Target group analysis',
+            'White space mapping'
           ]
         };
       case 4:
         return {
           type: 'High Barriers',
           insights: [
-            'Strict rules in place',
-            'Major investment needed',
-            'Many stakeholders involved'
+            'Compliance staging gates',
+            'Capital staging gates',
+            'Partnership channels'
           ],
           strategies: [
-            'Meet strict standards',
-            'Engage key players',
-            'Plan your rollout'
+            'Gate-by-gate compliance map',
+            'Capital stage requirements',
+            'Channel development sequence'
           ]
         };
       case 5:
         return {
           type: 'Very High Barriers',
           insights: [
-            'Toughest regulations exist',
-            'Highest resource needs',
-            'Most limited access'
+            'Regulatory staging gates',
+            'Education program targets',
+            'Market access channels'
           ],
           strategies: [
-            'Break into markets',
-            'Use resources well',
-            'Clear the barriers'
+            'Gate sequence framework',
+            'Target group mapping',
+            'Access channel analysis'
           ]
         };
       default:
@@ -128,7 +128,7 @@ const BarrierTooltip: React.FC<BarrierTooltipProps> = ({ barrierLevel, marketNam
           </button>
         </div>
         <div className="text-sm text-indigo-600">
-          Understanding your market barriers
+          Market barrier analysis
         </div>
       </div>
 
@@ -143,7 +143,7 @@ const BarrierTooltip: React.FC<BarrierTooltipProps> = ({ barrierLevel, marketNam
         </div>
 
         <div>
-          <h4 className="text-sm font-medium text-indigo-600 mb-2">What We Bring:</h4>
+          <h4 className="text-sm font-medium text-indigo-600 mb-2">Entry Approach:</h4>
           <ul className="list-disc pl-4 space-y-1">
             {info.strategies.map((strategy, index) => (
               <li key={index} className="text-sm text-gray-600">{strategy}</li>
