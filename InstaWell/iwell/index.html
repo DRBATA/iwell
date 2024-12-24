@@ -1,82 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Health Sync Journal</title>
-    <link rel="stylesheet" href="/src/style.css">
+  <!-- Essential Meta Tags -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#40E0D0">
+  <title>Health Sync Journal</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Track and analyze your health symptoms with Health Sync Journal">
+  <meta property="og:title" content="Health Sync Journal">
+  <meta property="og:description" content="Track and analyze your health symptoms with Health Sync Journal">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://healthsyncjournal.com">
+  <meta property="og:image" content="https://healthsyncjournal.com/og-image.jpg">
+  
+  <!-- iOS Meta Tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Health Sync Journal">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="/src/style.css">
+  
+  <!-- Preload Critical Assets -->
+  <link rel="preload" href="/src/main.js" as="script">
 </head>
 <body>
-    <div class="app">
-        <header role="banner" class="header">
-            <h1>Health Sync Journal</h1>
-            <div class="header-controls">
-                <!-- Add aria-label for better screen reader context -->
-                <button 
-                    id="createHSJ" 
-                    class="action-button"
-                    aria-label="Create new Health Sync Journal"
-                >
-                    Create New HSJ
-                </button>
-                
-                <!-- Create a label for our file input -->
-                <label for="hsjFile" class="action-button" tabindex="0">
-                    Load HSJ
-                    <input 
-                        type="file" 
-                        id="hsjFile" 
-                        accept=".json" 
-                        class="hidden"
-                        aria-label="Load Health Sync Journal file"
-                    >
-                </label>
+  <!-- Skip to main content link for keyboard users -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Main Application Container -->
+  <div class="app" role="application" aria-label="Health Sync Journal Application">
+    <!-- Header Section -->
+    <header role="banner" class="header">
+      <h1>Health Sync Journal</h1>
+      <div class="header-controls" role="toolbar" aria-label="Journal controls">
+        <!-- Create New Journal Button -->
+        <button 
+          id="createHSJ" 
+          class="action-button"
+          aria-label="Create new Health Sync Journal"
+          aria-haspopup="dialog"
+        >
+          Create New HSJ
+        </button>
+        
+        <!-- Load Journal File Input -->
+        <label for="hsjFile" class="action-button" tabindex="0" role="button">
+          Load HSJ
+          <input 
+            type="file" 
+            id="hsjFile" 
+            accept=".json" 
+            class="hidden"
+            aria-label="Load Health Sync Journal file"
+            aria-describedby="file-description"
+          >
+        </label>
+        <div id="file-description" class="sr-only">
+          Select a JSON file containing your saved Health Sync Journal data
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main id="main-content" role="main" class="main-content">
+      <!-- Diagnostic Panel -->
+      <section class="diagnostic-panel" aria-labelledby="symptom-selection-title">
+        <!-- Symptom Selection Area -->
+        <div class="select-symptoms">
+          <h2 id="symptom-selection-title">Select Symptoms</h2>
+          <div 
+            id="symptomList" 
+            role="listbox"
+            aria-label="Available symptoms for selection"
+            aria-multiselectable="true"
+            tabindex="0"
+          ></div>
+        </div>
+        
+        <!-- Diagnostic Stack Area -->
+        <div class="diagnostic-stack" aria-labelledby="diagnostic-stack-title">
+          <h2 id="diagnostic-stack-title">Diagnostic Stack</h2>
+          <div 
+            id="stackList" 
+            role="list"
+            aria-label="Currently selected symptoms"
+            aria-live="polite"
+            aria-relevant="additions removals"
+          ></div>
+          <!-- Analyze Button with Flask Animation -->
+          <button 
+            id="analyzeBtn" 
+            class="analyze-button"
+            aria-label="Analyze selected symptoms"
+            aria-describedby="analyze-description"
+          >
+            <div class="flask-container" role="presentation" aria-hidden="true">
+              <div class="flask">
+                <div class="liquid" id="analyzeLiquid"></div>
+              </div>
             </div>
-        </header>
+            Analyze Symptoms
+          </button>
+          <div id="analyze-description" class="sr-only">
+            Click to analyze your selected symptoms and view potential diagnoses
+          </div>
+        </div>
+      </section>
 
-        <main role="main" class="main-content">
-            <section class="diagnostic-panel">
-                <div class="select-symptoms">
-                    <h2>Select Symptoms</h2>
-                    <!-- Add aria-label to describe the list's purpose -->
-                    <div 
-                        id="symptomList" 
-                        role="listbox"
-                        aria-label="Available symptoms for selection"
-                    ></div>
-                </div>
-                
-                <div class="diagnostic-stack">
-                    <h2>Diagnostic Stack</h2>
-                    <!-- Add aria-label for the stack list -->
-                    <div 
-                        id="stackList" 
-                        role="list"
-                        aria-label="Currently selected symptoms"
-                    ></div>
-                    <button 
-                        id="analyzeBtn" 
-                        class="analyze-button"
-                        aria-label="Analyze selected symptoms"
-                    >
-                        Analyze Symptoms
-                    </button>
-                </div>
-            </section>
+      <!-- Analysis Results Panel -->
+      <section class="analysis-panel" aria-labelledby="analysis-results-title">
+        <h2 id="analysis-results-title">Analysis Results</h2>
+        <div 
+          id="analysisResults" 
+          role="region" 
+          aria-live="polite"
+          aria-label="Diagnostic analysis results"
+          aria-atomic="true"
+          aria-relevant="additions text"
+        ></div>
+      </section>
+    </main>
 
-            <section class="analysis-panel">
-                <h2>Analysis Results</h2>
-                <!-- Region role with aria-label for results section -->
-                <div 
-                    id="analysisResults" 
-                    role="region" 
-                    aria-live="polite"
-                    aria-label="Diagnostic analysis results"
-                ></div>
-            </section>
-        </main>
+    <!-- Status Messages for Screen Readers -->
+    <div aria-live="assertive" class="sr-only" id="status-messages"></div>
+  </div>
+  
+  <!-- Loading Screen Overlay -->
+  <div 
+    id="loadingScreen" 
+    class="loading-screen hidden" 
+    role="dialog"
+    aria-labelledby="loading-title"
+    aria-describedby="loading-description"
+    aria-modal="true"
+  >
+    <div class="flask-container large" role="presentation" aria-hidden="true">
+      <div class="flask">
+        <div class="liquid" id="loadingLiquid"></div>
+      </div>
     </div>
-    
-    <script type="module" src="/src/main.js"></script>
+    <h2 id="loading-title" class="sr-only">Analysis in Progress</h2>
+    <p id="loading-description">Analyzing symptoms...</p>
+  </div>
+
+  <!-- Error Dialog -->
+  <div 
+    id="errorDialog" 
+    class="dialog hidden" 
+    role="alertdialog"
+    aria-labelledby="error-title"
+    aria-describedby="error-message"
+    aria-modal="true"
+  >
+    <h2 id="error-title">Error</h2>
+    <p id="error-message"></p>
+    <button class="action-button" onclick="closeErrorDialog()" aria-label="Close error message">
+      Close
+    </button>
+  </div>
+
+  <!-- JavaScript Module -->
+  <script type="module" src="/src/main.js"></script>
 </body>
 </html>
+
