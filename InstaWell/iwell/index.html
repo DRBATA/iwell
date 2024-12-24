@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Sync Journal</title>
+    <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+    <div class="app">
+        <header role="banner" class="header">
+            <h1>Health Sync Journal</h1>
+            <div class="header-controls">
+                <!-- Add aria-label for better screen reader context -->
+                <button 
+                    id="createHSJ" 
+                    class="action-button"
+                    aria-label="Create new Health Sync Journal"
+                >
+                    Create New HSJ
+                </button>
+                
+                <!-- Create a label for our file input -->
+                <label for="hsjFile" class="action-button" tabindex="0">
+                    Load HSJ
+                    <input 
+                        type="file" 
+                        id="hsjFile" 
+                        accept=".json" 
+                        class="hidden"
+                        aria-label="Load Health Sync Journal file"
+                    >
+                </label>
+            </div>
+        </header>
+
+        <main role="main" class="main-content">
+            <section class="diagnostic-panel">
+                <div class="select-symptoms">
+                    <h2>Select Symptoms</h2>
+                    <!-- Add aria-label to describe the list's purpose -->
+                    <div 
+                        id="symptomList" 
+                        role="listbox"
+                        aria-label="Available symptoms for selection"
+                    ></div>
+                </div>
+                
+                <div class="diagnostic-stack">
+                    <h2>Diagnostic Stack</h2>
+                    <!-- Add aria-label for the stack list -->
+                    <div 
+                        id="stackList" 
+                        role="list"
+                        aria-label="Currently selected symptoms"
+                    ></div>
+                    <button 
+                        id="analyzeBtn" 
+                        class="analyze-button"
+                        aria-label="Analyze selected symptoms"
+                    >
+                        Analyze Symptoms
+                    </button>
+                </div>
+            </section>
+
+            <section class="analysis-panel">
+                <h2>Analysis Results</h2>
+                <!-- Region role with aria-label for results section -->
+                <div 
+                    id="analysisResults" 
+                    role="region" 
+                    aria-live="polite"
+                    aria-label="Diagnostic analysis results"
+                ></div>
+            </section>
+        </main>
+    </div>
+    
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
