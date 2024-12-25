@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#10B981">
+    <title>InstaWell - Smart Medical Triage</title>
+
+    <!-- Favicon and PWA icons -->
+    <link rel="icon" type="image/svg+xml" href="icons/instawell-favicon.svg">
+    <link rel="apple-touch-icon" href="icons/instawell-apple-touch.svg">
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="InstaWell - Smart Medical Triage">
+    <meta property="og:description" content="Intelligent symptom assessment and medical guidance at your fingertips">
+    <meta property="og:image" content="icons/instawell-og-image.svg">
+    <meta property="og:url" content="https://your-domain.com">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="InstaWell - Smart Medical Triage">
+    <meta name="twitter:description" content="Intelligent symptom assessment and medical guidance at your fingertips">
+    <meta name="twitter:image" content="icons/instawell-og-image.svg">
+
+    <!-- App Description -->
+    <meta name="description" content="Smart medical triage system with offline capability and privacy-focused design">
+    <meta name="keywords" content="medical triage, symptom checker, healthcare app, medical guidance">
+
+    <!-- Your existing stylesheets -->
+    <link rel="stylesheet" href="/src/style.css">
+
+    <style>
+        :root {
+            --color-primary: #10B981;
+            --color-background: #0F172A;
+            --color-surface: #1E293B;
+            --color-text: #FFFFFF;
+        }
+
+        body {
+            background: var(--color-background);
+            color: var(--color-text);
+            font-family: system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .hero {
+            background: linear-gradient(to bottom, var(--color-surface), var(--color-background));
+            padding: 2rem;
+            text-align: center;
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .price {
+            font-size: 2rem;
+            color: var(--color-primary);
+            margin: 2rem 0;
+        }
+
+        .features {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .feature-item {
+            background: var(--color-surface);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--color-primary);
+        }
+
+        .cta-button {
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .cta-button:active {
+            transform: scale(0.98);
+        }
+
+        .install-note {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .disclaimer {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .features {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>InstaWell</h1>
+        <p>Smart Medical Triage at Your Fingertips</p>
+        <div class="price">£17.99</div>
+        <button class="cta-button" onclick="window.location.href='YOUR_SHOPIFY_LINK'">
+            Buy Now
+        </button>
+        <p class="install-note">After purchase, you'll receive instant access to install the app</p>
+    </div>
+
+    <div class="features">
+        <div class="feature-item">
+            <h3>🎯 Smart Symptom Analysis</h3>
+            <p>Advanced medical knowledge graph for accurate symptom assessment</p>
+        </div>
+        <div class="feature-item">
+            <h3>💊 OTC Medication Guidance</h3>
+            <p>Clear recommendations for over-the-counter treatments</p>
+        </div>
+        <div class="feature-item">
+            <h3>⚡ Instant Escalation Advice</h3>
+            <p>Know exactly when to seek professional medical care</p>
+        </div>
+        <div class="feature-item">
+            <h3>📱 Works Offline</h3>
+            <p>Full functionality even without internet connection</p>
+        </div>
+    </div>
+
+    <div class="disclaimer">
+        <h4>Medical Disclaimer</h4>
+        <p>InstaWell is designed to provide general guidance and is not a substitute for professional medical advice. Always consult a healthcare provider for medical decisions. In case of emergency, call your local emergency services immediately.</p>
+        
+        <h4>Privacy Notice</h4>
+        <p>Your health data stays on your device. We respect your privacy and do not collect personal medical information.</p>
+    </div>
+
+    <script>
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(registration => console.log('ServiceWorker registered'))
+                .catch(err => console.log('ServiceWorker registration failed'));
+        }
+
+        // Check if installable
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            // Update UI to show install button if needed
+        });
+    </script>
+</body>
+</html>

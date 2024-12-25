@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#10B981">
+    <title>InstaWell - Smart Medical Triage</title>
+
+    <!-- Favicon and PWA icons -->
+    <link rel="icon" type="image/svg+xml" href="icons/instawell-favicon.svg">
+    <link rel="apple-touch-icon" href="icons/instawell-apple-touch.svg">
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="InstaWell - Smart Medical Triage">
+    <meta property="og:description" content="Intelligent symptom assessment and medical guidance at your fingertips">
+    <meta property="og:image" content="icons/instawell-og-image.svg">
+    <meta property="og:url" content="https://your-domain.com">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="InstaWell - Smart Medical Triage">
+    <meta name="twitter:description" content="Intelligent symptom assessment and medical guidance at your fingertips">
+    <meta name="twitter:image" content="icons/instawell-og-image.svg">
+
+    <!-- App Description -->
+    <meta name="description" content="Smart medical triage system with offline capability and privacy-focused design">
+    <meta name="keywords" content="medical triage, symptom checker, healthcare app, medical guidance">
+
+    <!-- Your existing stylesheets -->
+    <link rel="stylesheet" href="/src/style.css">
+
+    <!-- Ensure Lucide loads before our scripts -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <div class="diagnostic-interface">
+    <!-- Central Category Scroll -->
+    <main class="category-nav" role="navigation" aria-label="Medical categories">
+      <!-- Auto-populated from medical graph -->
+    </main>
+
+    <!-- Symptom Selection Area -->
+    <section class="symptom-area" role="region" aria-label="Symptom selection">
+      <header class="symptom-header">
+        <button class="back-button" aria-label="Back to categories">
+          <i data-lucide="arrow-left"></i>
+        </button>
+        <h2 class="category-title"><!-- Dynamic --></h2>
+      </header>
+      
+      <div class="symptom-list">
+        <!-- Auto-populated symptoms -->
+      </div>
+      
+      <div class="refinement-options">
+        <!-- Dynamic refinement options -->
+      </div>
+    </section>
+
+    <!-- Diagnostic Stack Drawer -->
+    <aside class="stack-drawer" role="complementary" aria-label="Diagnostic stack">
+      <div class="drawer-trigger" role="button" aria-label="Toggle diagnostic stack">
+        <i data-lucide="chevron-left"></i>
+      </div>
+      
+      <div class="drawer-content">
+        <h2>Diagnostic Stack</h2>
+        <div class="stack-list">
+          <!-- Dynamic stack content -->
+        </div>
+        <button class="analyze-button" type="button" disabled>
+          Analyze Symptoms
+        </button>
+      </div>
+    </aside>
+
+    <!-- Analysis Modal -->
+    <div class="analysis-modal" role="dialog" aria-modal="true">
+      <div class="modal-content">
+        <h2>Analysis Results</h2>
+        <div class="results-container">
+          <!-- Analysis results -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load our modules after DOM is ready -->
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

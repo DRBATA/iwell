@@ -1,0 +1,38 @@
+{
+  "name": "InstaWell Medical Triage",
+  "short_name": "InstaWell",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0F172A",
+  "theme_color": "#10B981",
+  "icons": [
+    {
+      "src": "icons/instawell-favicon.svg",
+      "sizes": "48x48",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "icons/instawell-large-favicon.svg",
+      "sizes": "96x96",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "icons/instawell-pwa-icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/instawell-pwa-splash.svg",
+      "sizes": "1024x1024",
+      "type": "image/svg+xml"
+    }
+  ],
+  "splash_screens": [
+    {
+      "src": "icons/instawell-pwa-splash.svg",
+      "sizes": "2048x2048",
+      "type": "image/svg+xml"
+    }
+  ]
+}
