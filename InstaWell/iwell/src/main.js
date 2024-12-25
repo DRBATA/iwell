@@ -1,404 +1,297 @@
-// Import the medical graph that contains our symptom definitions
-import { medicalGraph } from './medicalGraph.js';
+import { medicalGraph, graphUtils } from './medicalGraph.js';
+import { HealthSyncJournal } from './models/HSJ.js';
 
-// Keep track of symptoms user has selected with their refinements
-let diagnosticStack = [];
-
-// Global state for graph traversal depth
-let graphTraversalDepth = 0;
-
-// Global state object
+// State Management
 const state = {
+  currentCategory: null,
+  selectedSymptom: null,
+  diagnosticStack: [],
+  drawerOpen: false,
   isAnalyzing: false,
-  analysisResults: null,
-  isTouchDevice: 'ontouchstart' in window,
-  isFlaskTilted: false
+  hsj: new HealthSyncJournal()
 };
 
 // DOM Elements
 const elements = {
-  symptomList: document.getElementById('symptomList'),
-  stackList: document.getElementById('stackList'),
-  analyzeBtn: document.getElementById('analyzeBtn'),
-  analysisResults: document.getElementById('analysisResults'),
-  createHSJBtn: document.getElementById('createHSJ'),
-  loadHSJInput: document.getElementById('hsjFile'),
-  loadingScreen: document.getElementById('loadingScreen'),
-  analyzeLiquid: document.getElementById('analyzeLiquid'),
-  loadingLiquid: document.getElementById('loadingLiquid'),
-  landingFlask: document.getElementById('landingFlask'),
-  statusMessages: document.getElementById('status-messages'),
-  errorDialog: document.getElementById('errorDialog'),
-  errorMessage: document.getElementById('error-message')
+  categoryNav: document.querySelector('.category-nav'),
+  symptomArea: document.querySelector('.symptom-area'),
+  symptomList: document.querySelector('.symptom-list'),
+  refinementOptions: document.querySelector('.refinement-options'),
+  stackDrawer: document.querySelector('.stack-drawer'),
+  drawerTrigger: document.querySelector('.drawer-trigger'),
+  stackList: document.querySelector('.stack-list'),
+  analyzeButton: document.querySelector('.analyze-button'),
+  analysisModal: document.querySelector('.analysis-modal'),
+  backButton: document.querySelector('.back-button'),
+  categoryTitle: document.querySelector('.category-title')
 };
 
-// Initialize the application
+// Initialize Application
 function initializeApp() {
+  renderCategories();
   setupEventListeners();
-  populateSymptomList();
-  startBubbling(elements.analyzeLiquid);
-  simulateGraphTraversal();
+  setupIntersectionObserver();
+  setupTouchHandlers();
 }
 
-// Set up event listeners
-function setupEventListeners() {
-  elements.analyzeBtn.addEventListener('click', analyzeSymptoms);
-  elements.createHSJBtn.addEventListener('click', handleCreateHSJ);
-  elements.loadHSJInput.addEventListener('change', handleLoadHSJ);
-  elements.symptomList.addEventListener('click', handleSymptomClick);
-  
-  if (state.isTouchDevice) {
-    const flasks = document.querySelectorAll('.flask');
-    flasks.forEach(flask => {
-      flask.addEventListener('touchstart', handleTouchStart);
-      flask.addEventListener('touchend', handleTouchEnd);
-    });
-  }
-}
-
-// Populate the symptom list
-function populateSymptomList() {
-  const baseSymptoms = new Set();
-  
-  for (const condition in medicalGraph) {
-    medicalGraph[condition].nodes.forEach(node => {
-      baseSymptoms.add(node.baseSymptom);
-    });
-  }
-  
-  baseSymptoms.forEach(symptom => {
-    const symptomItem = document.createElement('div');
-    symptomItem.className = 'symptom-item';
-    symptomItem.textContent = capitalizeFirstLetter(symptom);
-    symptomItem.setAttribute('role', 'option');
-    symptomItem.setAttribute('aria-selected', 'false');
-    elements.symptomList.appendChild(symptomItem);
-  });
-}
-
-// Handle symptom click
-function handleSymptomClick(event) {
-  if (event.target.classList.contains('symptom-item')) {
-    const symptom = event.target.textContent.toLowerCase();
-    addToStack(symptom);
-  }
-}
-
-// Add symptom to diagnostic stack
-function addToStack(baseSymptom) {
-  const refinements = new Set();
-  
-  Object.values(medicalGraph).forEach(condition => {
-    condition.nodes
-      .filter(node => node.baseSymptom === baseSymptom)
-      .forEach(node => refinements.add({
-        id: node.id,
-        name: node.name,
-        refinement: node.refinement
-      }));
-  });
-  
-  showRefinementOptions(baseSymptom, Array.from(refinements));
-}
-
-// Show refinement options for a symptom
-function showRefinementOptions(baseSymptom, refinements) {
-  const optionsDiv = document.createElement('div');
-  optionsDiv.className = 'refinement-options';
-  optionsDiv.setAttribute('role', 'dialog');
-  optionsDiv.setAttribute('aria-label', `Specify type of ${baseSymptom}`);
-  
-  optionsDiv.innerHTML = `
-    <div class="refinement-prompt">
-      <p>Specify type of ${baseSymptom}:</p>
-      <div class="options">
-        ${refinements.map(ref => `
-          <button 
-            class="refinement-btn"
-            data-node-id="${ref.id}"
-          >
-            ${ref.name}
-          </button>
-        `).join('')}
+// Render Categories in Central Scroll
+function renderCategories() {
+  const categories = graphUtils.getCategories();
+  elements.categoryNav.innerHTML = categories.map(category => `
+    <div class="category-item" data-category="${category.id}">
+      <div class="category-icon">
+        <i data-lucide="${category.icon}"></i>
       </div>
+      <span class="category-name">${category.name}</span>
+      <p class="category-description">${category.description}</p>
+    </div>
+  `).join('');
+  
+  lucide.createIcons();
+}
+
+// Handle Category Selection
+function handleCategorySelect(categoryId) {
+  state.currentCategory = categoryId;
+  const category = graphUtils.getCategories().find(c => c.id === categoryId);
+  
+  elements.categoryTitle.textContent = category.name;
+  elements.symptomArea.classList.add('visible');
+  
+  renderSymptoms(categoryId);
+}
+
+// Render Symptoms for Category
+function renderSymptoms(categoryId) {
+  const symptoms = graphUtils.getBaseSymptoms(categoryId);
+  
+  elements.symptomList.innerHTML = symptoms.map(symptom => `
+    <div class="symptom-item" data-symptom="${symptom.baseSymptom}">
+      <h3>${symptom.name}</h3>
+      <i data-lucide="chevron-right"></i>
+    </div>
+  `).join('');
+  
+  lucide.createIcons();
+}
+
+// Handle Symptom Selection
+function handleSymptomSelect(baseSymptom) {
+  state.selectedSymptom = baseSymptom;
+  showRefinements(baseSymptom);
+}
+
+// Show Refinement Options
+function showRefinements(baseSymptom) {
+  const refinements = graphUtils.getRefinements(state.currentCategory, baseSymptom);
+  
+  elements.refinementOptions.innerHTML = `
+    <h3>Select Type</h3>
+    <div class="refinement-grid">
+      ${refinements.map(ref => `
+        <button class="refinement-button" 
+          data-id="${ref.id}" 
+          data-severity="${ref.severity}">
+          <span>${ref.name}</span>
+          <small>${ref.details.join(' • ')}</small>
+        </button>
+      `).join('')}
     </div>
   `;
   
-  optionsDiv.querySelectorAll('.refinement-btn').forEach(btn => {
-    btn.onclick = () => {
-      const nodeId = btn.dataset.nodeId;
-      const matchingNode = findNodeById(nodeId);
-      
-      if (!diagnosticStack.some(s => s.id === nodeId)) {
-        diagnosticStack.push(matchingNode);
-        updateStackDisplay();
-        optionsDiv.remove();
-        announceToScreenReader(`Added ${matchingNode.name} to diagnostic stack`);
-      }
-    };
-  });
-  
-  elements.stackList.appendChild(optionsDiv);
+  elements.refinementOptions.classList.add('visible');
 }
 
-// Find a node by its ID
-function findNodeById(nodeId) {
-  for (const condition in medicalGraph) {
-    const node = medicalGraph[condition].nodes.find(n => n.id === nodeId);
-    if (node) return node;
+// Add to Diagnostic Stack
+function addToStack(symptomData) {
+  if (!state.diagnosticStack.some(item => item.id === symptomData.id)) {
+    state.diagnosticStack.push(symptomData);
+    updateStackDisplay();
+    openDrawer();
   }
-  return null;
 }
 
-// Update the display of the diagnostic stack
+// Update Stack Display
 function updateStackDisplay() {
-  elements.stackList.innerHTML = '';
-  diagnosticStack.forEach(symptom => {
-    const stackItem = document.createElement('div');
-    stackItem.className = 'stack-item';
-    stackItem.setAttribute('role', 'listitem');
-    stackItem.innerHTML = `
-      ${symptom.name}
-      <button class="remove-btn" onclick="removeFromStack('${symptom.id}')" aria-label="Remove ${symptom.name}">Remove</button>
-    `;
-    elements.stackList.appendChild(stackItem);
-  });
-}
-
-// Remove a symptom from the stack
-function removeFromStack(symptomId) {
-  const removedSymptom = diagnosticStack.find(s => s.id === symptomId);
-  diagnosticStack = diagnosticStack.filter(s => s.id !== symptomId);
-  updateStackDisplay();
-  announceToScreenReader(`Removed ${removedSymptom.name} from diagnostic stack`);
-}
-
-// Analyze symptoms
-function analyzeSymptoms() {
-  setAnalyzing(true);
-  const results = {};
-  const selectedSymptoms = diagnosticStack.map(s => s.id);
-  
-  setTimeout(() => {
-    for (const [conditionName, condition] of Object.entries(medicalGraph)) {
-      const matchedNodes = condition.nodes.filter(node => 
-        selectedSymptoms.includes(node.id)
-      );
-      
-      const matchedEdges = condition.edges.filter(edge => 
-        selectedSymptoms.includes(edge.from) && 
-        selectedSymptoms.includes(edge.to)
-      );
-  
-      const likelihood = calculateLikelihood(
-        matchedNodes.length,
-        condition.nodes.length,
-        matchedEdges.length,
-        condition.edges.length
-      );
-  
-      results[conditionName] = {
-        matchedSymptoms: matchedNodes.length,
-        totalSymptoms: condition.nodes.length,
-        matchedConnections: matchedEdges.length,
-        totalConnections: condition.edges.length,
-        likelihood: likelihood
-      };
-    }
-  
-    displayResults(results);
-    setAnalyzing(false);
-  }, 2000);
-}
-
-// Calculate likelihood of a condition
-function calculateLikelihood(matchedNodes, totalNodes, matchedEdges, totalEdges) {
-  const nodeScore = (matchedNodes / totalNodes) * 100;
-  const edgeScore = (matchedEdges / totalEdges) * 100;
-  return (nodeScore * 0.4 + edgeScore * 0.6);
-}
-
-// Display analysis results
-function displayResults(results) {
-  elements.analysisResults.innerHTML = '';
-  
-  for (const [condition, result] of Object.entries(results)) {
-    const resultItem = document.createElement('div');
-    resultItem.className = 'condition-result';
-    resultItem.innerHTML = `
-      <h3>${condition}</h3>
-      <div class="likelihood-meter" role="progressbar" aria-valuenow="${result.likelihood.toFixed(1)}" aria-valuemin="0" aria-valuemax="100">
-        <div class="meter-fill" style="width: ${result.likelihood}%"></div>
-        <span>${result.likelihood.toFixed(1)}% match</span>
+  elements.stackList.innerHTML = state.diagnosticStack.map(item => `
+    <div class="stack-item" data-severity="${item.severity}">
+      <span>${item.name}</span>
+      <div class="stack-item-actions">
+        <button class="remove-btn" data-id="${item.id}">
+          <i data-lucide="x"></i>
+        </button>
       </div>
-      <p>Matched Symptoms: ${result.matchedSymptoms}/${result.totalSymptoms}</p>
-      <p>Matched Connections: ${result.matchedConnections}/${result.totalConnections}</p>
-    `;
-    elements.analysisResults.appendChild(resultItem);
-  }
+    </div>
+  `).join('');
   
-  announceToScreenReader('Analysis complete. Results are now displayed.');
+  lucide.createIcons();
+  updateAnalyzeButton();
 }
 
-// Handle creating a new Health Sync Journal
-function handleCreateHSJ() {
-  const hsj = {
-    symptoms: diagnosticStack,
-    analysis: state.analysisResults,
-    timestamp: new Date().toISOString()
-  };
-  downloadHSJ(hsj);
+// Update Analyze Button State
+function updateAnalyzeButton() {
+  elements.analyzeButton.disabled = state.diagnosticStack.length === 0;
 }
 
-// Handle loading a Health Sync Journal
-function handleLoadHSJ(event) {
-  const file = event.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      try {
-        const hsj = JSON.parse(e.target.result);
-        loadHSJ(hsj);
-      } catch (error) {
-        showError('Invalid HSJ file. Please try again.');
-      }
-    };
-    reader.readAsText(file);
-  }
-}
-
-// Download Health Sync Journal
-function downloadHSJ(hsj) {
-  const blob = new Blob([JSON.stringify(hsj, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `HSJ_${new Date().toISOString()}.json`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  announceToScreenReader('Health Sync Journal has been downloaded.');
-}
-
-// Load Health Sync Journal
-function loadHSJ(hsj) {
-  diagnosticStack = hsj.symptoms || [];
-  state.analysisResults = hsj.analysis;
-  updateStackDisplay();
-  if (state.analysisResults) {
-    displayResults(state.analysisResults);
-  }
-  announceToScreenReader('Health Sync Journal has been loaded.');
-}
-
-// Show error message
-function showError(message) {
-  elements.errorMessage.textContent = message;
-  elements.errorDialog.classList.remove('hidden');
-  announceToScreenReader('An error occurred: ' + message);
-}
-
-// Close error dialog
-function closeErrorDialog() {
-  elements.errorDialog.classList.add('hidden');
-}
-
-// Set analyzing state
-function setAnalyzing(isAnalyzing) {
-  state.isAnalyzing = isAnalyzing;
-  elements.loadingScreen.classList.toggle('hidden', !isAnalyzing);
-  elements.analyzeBtn.disabled = isAnalyzing;
-  elements.loadingScreen.setAttribute('aria-hidden', !isAnalyzing);
-}
-
-// Create a bubble for animation
-function createBubble(container, isLarge = false, isAnalyzing = false) {
-  const bubble = document.createElement('div');
-  bubble.classList.add('bubble');
+// Analyze Symptoms
+async function analyzeSymptoms() {
+  if (state.isAnalyzing || state.diagnosticStack.length === 0) return;
   
-  const size = isLarge ? Math.random() * 20 + 10 : Math.random() * 6 + 3;
-  bubble.style.width = `${size}px`;
-  bubble.style.height = `${size}px`;
+  state.isAnalyzing = true;
+  elements.analyzeButton.classList.add('loading');
   
-  const leftPosition = state.isFlaskTilted ? 
-    Math.random() * 60 + 20 : 
-    Math.random() * 80 + 10;
-  bubble.style.left = `${leftPosition}%`;
+  // Simulate processing time for UX
+  await new Promise(resolve => setTimeout(resolve, 1500));
   
-  const duration = isLarge ? Math.random() * 3 + 3 : Math.random() * 2 + 2;
-  bubble.style.animationDuration = `${duration}s`;
+  const results = graphUtils.calculateLikelihood(state.diagnosticStack);
   
-  if (state.isFlaskTilted) {
-    bubble.style.animationName = 'riseTilted';
-  }
+  // Add to HSJ
+  state.hsj.addDiagnosticSession({
+    symptoms: state.diagnosticStack,
+    analysis: results
+  });
   
-  if (isAnalyzing) {
-    const glowIntensity = Math.min(graphTraversalDepth * 2, 10);
-    bubble.style.boxShadow = `0 0 ${glowIntensity}px ${glowIntensity / 2}px rgba(255, 255, 255, 0.7)`;
-  }
+  displayResults(results);
   
-  container.appendChild(bubble);
-  setTimeout(() => bubble.remove(), duration * 1000);
+  state.isAnalyzing = false;
+  elements.analyzeButton.classList.remove('loading');
 }
 
-// Start bubbling animation
-function startBubbling(container, isLarge = false, isAnalyzing = false) {
-  return setInterval(() => createBubble(container, isLarge, isAnalyzing), 800);
-}
-
-// Handle touch start for flask tilt
-function handleTouchStart(event) {
-  if (!state.isTouchDevice) return;
+// Display Analysis Results
+function displayResults(results) {
+  elements.analysisModal.querySelector('.results-container').innerHTML = 
+    results.map(result => `
+      <div class="result-item" data-severity="${result.severity}">
+        <div class="result-header">
+          <h3>${result.condition}</h3>
+          <span class="result-category">${result.category}</span>
+        </div>
+        <div class="likelihood-bar">
+          <div class="bar-fill" style="width: ${result.score}%"></div>
+          <span>${result.score.toFixed(1)}% match</span>
+        </div>
+        <div class="result-details">
+          <p>Matched Symptoms: ${result.matchedSymptoms}/${result.totalSymptoms}</p>
+          <p>Matched Connections: ${result.matchedConnections}/${result.totalConnections}</p>
+        </div>
+      </div>
+    `).join('');
   
-  event.preventDefault();
-  const flask = event.currentTarget;
-  state.isFlaskTilted = true;
-  flask.classList.add('tilted');
+  elements.analysisModal.classList.add('visible');
 }
 
-// Handle touch end for flask tilt
-function handleTouchEnd(event) {
-  if (!state.isTouchDevice) return;
+// Drawer Controls
+function toggleDrawer() {
+  state.drawerOpen = !state.drawerOpen;
+  elements.stackDrawer.classList.toggle('open', state.drawerOpen);
+}
+
+function openDrawer() {
+  state.drawerOpen = true;
+  elements.stackDrawer.classList.add('open');
+}
+
+// Setup Touch Handlers
+function setupTouchHandlers() {
+  let startX;
   
-  const flask = event.currentTarget;
-  state.isFlaskTilted = false;
-  flask.classList.remove('tilted');
-}
-
-// Simulate graph traversal
-function simulateGraphTraversal() {
-  const interval = setInterval(() => {
-    graphTraversalDepth++;
-    updateBubbleGlow();
-    if (graphTraversalDepth >= 5) {
-      clearInterval(interval);
+  elements.symptomArea.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+  });
+  
+  elements.symptomArea.addEventListener('touchmove', e => {
+    if (!startX) return;
+    
+    const currentX = e.touches[0].clientX;
+    const diff = startX - currentX;
+    
+    if (diff > 50) { // Swipe left
+      openDrawer();
+    } else if (diff < -50) { // Swipe right
+      elements.symptomArea.classList.remove('visible');
+      elements.refinementOptions.classList.remove('visible');
     }
-  }, 1000);
-}
-
-// Update bubble glow based on graph traversal depth
-function updateBubbleGlow() {
-  const bubbles = document.querySelectorAll('.bubble');
-  bubbles.forEach(bubble => {
-    const glowIntensity = Math.min(graphTraversalDepth * 2, 10);
-    bubble.style.boxShadow = `0 0 ${glowIntensity}px ${glowIntensity / 2}px rgba(255, 255, 255, 0.7)`;
+    
+    startX = null;
   });
 }
 
-// Announce message to screen reader
-function announceToScreenReader(message) {
-  elements.statusMessages.textContent = message;
+// Setup Intersection Observer for Category Scroll
+function setupIntersectionObserver() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+      }
+    });
+  }, { threshold: 0.5 });
+  
+  document.querySelectorAll('.category-item').forEach(item => {
+    observer.observe(item);
+  });
 }
 
-// Capitalize first letter of a string
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
+// Event Listeners
+function setupEventListeners() {
+  // Category Selection
+  elements.categoryNav.addEventListener('click', e => {
+    const categoryItem = e.target.closest('.category-item');
+    if (categoryItem) {
+      handleCategorySelect(categoryItem.dataset.category);
+    }
+  });
+  
+  // Symptom Selection
+  elements.symptomList.addEventListener('click', e => {
+    const symptomItem = e.target.closest('.symptom-item');
+    if (symptomItem) {
+      handleSymptomSelect(symptomItem.dataset.symptom);
+    }
+  });
+  
+  // Refinement Selection
+  elements.refinementOptions.addEventListener('click', e => {
+    const refinementBtn = e.target.closest('.refinement-button');
+    if (refinementBtn) {
+      const symptomData = {
+        id: refinementBtn.dataset.id,
+        name: refinementBtn.querySelector('span').textContent,
+        severity: refinementBtn.dataset.severity
+      };
+      addToStack(symptomData);
+      elements.refinementOptions.classList.remove('visible');
+    }
+  });
+  
+  // Back Button
+  elements.backButton.addEventListener('click', () => {
+    elements.symptomArea.classList.remove('visible');
+    elements.refinementOptions.classList.remove('visible');
+  });
+  
+  // Drawer Toggle
+  elements.drawerTrigger.addEventListener('click', toggleDrawer);
+  
+  // Remove from Stack
+  elements.stackList.addEventListener('click', e => {
+    const removeBtn = e.target.closest('.remove-btn');
+    if (removeBtn) {
+      const id = removeBtn.dataset.id;
+      state.diagnosticStack = state.diagnosticStack.filter(item => item.id !== id);
+      updateStackDisplay();
+    }
+  });
+  
+  // Analyze Button
+  elements.analyzeButton.addEventListener('click', analyzeSymptoms);
+  
+  // Modal Close
+  elements.analysisModal.addEventListener('click', e => {
+    if (e.target === elements.analysisModal) {
+      elements.analysisModal.classList.remove('visible');
+    }
+  });
 }
 
-// Make removeFromStack and closeErrorDialog globally available
-window.removeFromStack = removeFromStack;
-window.closeErrorDialog = closeErrorDialog;
-
-// Start the app when the DOM is fully loaded
+// Initialize on Load
 document.addEventListener('DOMContentLoaded', initializeApp);
